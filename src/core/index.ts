@@ -132,14 +132,18 @@ export class Core implements ICore {
         if (!this.page) throw new Error("Page not initialized");
         const page = this.page;
 
-        const semanticTree = await page.evaluate(makeSemanticUiTree);
+        const ariaSnapshot = await page.ariaSnapshot({
+            mode: "ai",
+            boxes: true,
+            // @ts-ignore
+            depth: 6,
+        });
 
         return {
             url: page.url(),
             title: await page.title(),
             screenshot: await page.screenshot(),
-
-            semanticUiTree: JSON.stringify(semanticTree, null, 2),
+            ariaSnapshot: ariaSnapshot,
         };
     }
 

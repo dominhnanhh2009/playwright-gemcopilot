@@ -43,7 +43,7 @@ export interface BrowserState {
     url: string;
     title: string;
     screenshot: Buffer; // Hoặc base64 string
-    semanticUiTree: string;
+    ariaSnapshot: string;
 }
 
 export interface ICore {
