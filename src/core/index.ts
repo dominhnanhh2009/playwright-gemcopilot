@@ -1,6 +1,5 @@
 import { Browser, BrowserContext, Page, chromium } from 'playwright-core';
 import { chromium as chromiumExtra } from 'playwright-extra';
-// @ts-ignore
 import stealth from 'puppeteer-extra-plugin-stealth';
 
 import {
@@ -13,21 +12,12 @@ import {
 } from './interface';
 
 import { navigateTool, performNavigate } from './tools/navigate';
-import {
-    askForHumanConfirmationTool,
-    performAskForHumanConfirmation
-} from './tools/askForHumanConfirmation';
-
+import { askForHumanConfirmationTool, performAskForHumanConfirmation } from './tools/askForHumanConfirmation';
 import { mouseClickTool, performMouseClick } from './tools/mouseClick';
 import { mouseMoveTool, performMouseMove } from './tools/mouseMove';
 import { mouseDragTool, performMouseDrag } from './tools/mouseDrag';
 import { keyboardTextTool, performKeyboardText } from './tools/keyboardText';
 import { keyboardShortcutTool, performKeyboardShortcut } from './tools/keyboardShortcut';
-
-import { makeSemanticUiTree } from './semantic-ui-tree.js';
-
-// Tạm thời áp dụng plugin stealth
-// @ts-ignore
 chromiumExtra.use(stealth());
 
 export class Core implements ICore {
@@ -135,7 +125,6 @@ export class Core implements ICore {
         const ariaSnapshot = await page.ariaSnapshot({
             mode: "ai",
             boxes: true,
-            // @ts-ignore
             depth: 6,
         });
         return {
