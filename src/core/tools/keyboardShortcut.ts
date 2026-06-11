@@ -2,8 +2,8 @@ import { BrowserAction, ActionResult, ToolDefinition } from '../interface';
 import { Page } from 'playwright-core';
 
 export const keyboardShortcutTool: ToolDefinition = {
-    name: 'keyboardShortcut',
-    description: 'Nhấn một tổ hợp phím tắt.',
+    name: 'keyboard.shortcut',
+    description: 'Nhấn một tổ hợp phím tắt (VD: Control+C, Enter, Escape).',
     parameters: {
         type: 'object',
         properties: {
@@ -21,3 +21,4 @@ export async function performKeyboardShortcut(page: Page, action: BrowserAction)
     await page.keyboard.press(action.keys.join('+'));
     return { success: true, message: `Đã nhấn tổ hợp phím: ${action.keys.join('+')}` };
 }
+

@@ -2,8 +2,8 @@ import { BrowserAction, ActionResult, ToolDefinition } from '../interface';
 import { Page } from 'playwright-core';
 
 export const mouseClickTool: ToolDefinition = {
-    name: 'mouseClick',
-    description: 'Thực hiện thao tác nhấp chuột tại tọa độ xác định.',
+    name: 'mouse.click',
+    description: 'Thực hiện thao tác nhấp chuột tại tọa độ xác định. Lấy tọa độ (x, y) từ thông tin chi tiết của phần tử trong AriaSnapshot.',
     parameters: {
         type: 'object',
         properties: {
@@ -28,3 +28,4 @@ export async function performMouseClick(page: Page, action: BrowserAction): Prom
 
     return { success: true, message: `Đã click ${action.button || 'left'} tại (${action.x}, ${action.y})` };
 }
+

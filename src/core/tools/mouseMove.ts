@@ -2,8 +2,8 @@ import { BrowserAction, ActionResult, ToolDefinition } from '../interface';
 import { Page } from 'playwright-core';
 
 export const mouseMoveTool: ToolDefinition = {
-    name: 'mouseMove',
-    description: 'Di chuyển con trỏ chuột đến tọa độ xác định.',
+    name: 'mouse.move',
+    description: 'Di chuyển con trỏ chuột đến tọa độ (x, y) xác định. Lấy tọa độ từ AriaSnapshot.',
     parameters: {
         type: 'object',
         properties: {
@@ -22,3 +22,4 @@ export async function performMouseMove(page: Page, action: BrowserAction): Promi
     await page.mouse.move(action.x, action.y);
     return { success: true, message: `Con trỏ chuột đã di chuyển đến (${action.x}, ${action.y})` };
 }
+

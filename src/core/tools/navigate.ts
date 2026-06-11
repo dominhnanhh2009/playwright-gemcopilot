@@ -18,3 +18,4 @@ export async function performNavigate(page: Page, action: BrowserAction): Promis
     }
     return { success: false, message: "Thiếu URL để điều hướng", errorType: 'navigation_failed' };
 }
+

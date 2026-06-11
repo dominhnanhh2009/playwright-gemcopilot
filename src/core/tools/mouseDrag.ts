@@ -2,8 +2,8 @@ import { BrowserAction, ActionResult, ToolDefinition } from '../interface';
 import { Page } from 'playwright-core';
 
 export const mouseDragTool: ToolDefinition = {
-    name: 'mouseDrag',
-    description: 'Kéo chuột từ một điểm đến một điểm khác.',
+    name: 'mouse.drag',
+    description: 'Kéo chuột từ điểm (from) đến điểm (to). Lấy tọa độ từ AriaSnapshot.',
     parameters: {
         type: 'object',
         properties: {
@@ -28,3 +28,4 @@ export async function performMouseDrag(page: Page, action: BrowserAction): Promi
 
     return { success: true, message: `Đã kéo chuột từ (${action.from.x}, ${action.from.y}) đến (${action.to.x}, ${action.to.y})` };
 }
+
