@@ -13,14 +13,16 @@ import {
 } from './interface';
 
 import { navigateTool, performNavigate } from './tools/navigate';
-import { clickTool, performClick } from './tools/click';
-import { typeTool, performType } from './tools/type';
-import { scrollTool, performScroll } from './tools/scroll';
-import { keypressTool, performKeypress } from './tools/keypress';
 import {
     askForHumanConfirmationTool,
     performAskForHumanConfirmation
 } from './tools/askForHumanConfirmation';
+
+import { mouseClickTool, performMouseClick } from './tools/mouseClick';
+import { mouseMoveTool, performMouseMove } from './tools/mouseMove';
+import { mouseDragTool, performMouseDrag } from './tools/mouseDrag';
+import { keyboardTextTool, performKeyboardText } from './tools/keyboardText';
+import { keyboardShortcutTool, performKeyboardShortcut } from './tools/keyboardShortcut';
 
 import { makeSemanticUiTree } from './semantic-ui-tree.js';
 
@@ -95,21 +97,20 @@ export class Core implements ICore {
                 case 'navigate':
                     return await performNavigate(this.page, action);
 
-                case 'click':
-                    return await performClick(this.page, action);
-
-                case 'type':
-                    return await performType(this.page, action);
-
-                case 'scroll':
-                    return await performScroll(this.page);
-
-                case 'keypress':
-                    return await performKeypress(this.page, action);
-
                 case 'askForHumanConfirmation':
                     return await performAskForHumanConfirmation(action);
 
+                // New Actions
+                case 'mouse.click':
+                    return await performMouseClick(this.page, action);
+                case 'mouse.move':
+                    return await performMouseMove(this.page, action);
+                case 'mouse.drag':
+                    return await performMouseDrag(this.page, action);
+                case 'keyboard.text':
+                    return await performKeyboardText(this.page, action);
+                case 'keyboard.shortcut':
+                    return await performKeyboardShortcut(this.page, action);
                 default:
                     return {
                         success: false,
@@ -119,7 +120,6 @@ export class Core implements ICore {
             }
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
-
             return {
                 success: false,
                 message: `Lỗi hệ thống khi thực thi hành động ${action.type}: ${message}`,
@@ -138,7 +138,6 @@ export class Core implements ICore {
             // @ts-ignore
             depth: 6,
         });
-
         return {
             url: page.url(),
             title: await page.title(),
@@ -150,11 +149,13 @@ export class Core implements ICore {
     getTools(): ToolDefinition[] {
         return [
             navigateTool,
-            clickTool,
-            typeTool,
-            scrollTool,
-            keypressTool,
             askForHumanConfirmationTool,
+            mouseClickTool,
+            mouseMoveTool,
+            mouseDragTool,
+            keyboardTextTool,
+            keyboardShortcutTool,
         ];
     }
 }
+

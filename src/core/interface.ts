@@ -11,12 +11,43 @@ export interface BrowserConfig {
 }
 
 export interface BrowserAction {
-    type: 'click' | 'type' | 'navigate' | 'scroll' | 'done' | 'keypress' | 'askForHumanConfirmation';
+    type:
+        | 'click'
+        | 'type'
+        | 'navigate'
+        | 'scroll'
+        | 'done'
+        | 'keypress'
+        | 'askForHumanConfirmation'
+        // Mouse actions
+        | 'mouse.move'
+        | 'mouse.click'
+        | 'mouse.down'
+        | 'mouse.up'
+        | 'mouse.drag'
+        // Keyboard actions
+        | 'keyboard.text'
+        | 'keyboard.key'
+        | 'keyboard.shortcut'
+        | 'keyboard.down'
+        | 'keyboard.up';
     selector?: string;
     text?: string;
     url?: string;
     key?: string;
     question?: string;
+    // Geometry/Mouse properties
+    x?: number;
+    y?: number;
+    button?: 'left' | 'right' | 'middle';
+    clicks?: number;
+    deltaX?: number;
+    deltaY?: number;
+    from?: { x: number; y: number };
+    to?: { x: number; y: number };
+    steps?: number;
+    // Keyboard properties
+    keys?: string[];
 }
 
 export interface ActionResult {
