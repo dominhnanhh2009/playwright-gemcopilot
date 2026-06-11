@@ -73,9 +73,9 @@ export class Brain implements IBrain {
 
             const promptText = `
                 HƯỚNG DẪN:
-                 - nếu nhiệm vụ đã hoàn thành thì phản hồi mà ko gọi tool để kết thúc vòng lặp này!
+                 - nếu nhiệm vụ đã hoàn thành thì hãy phản hồi mà ko gọi tool để kết thúc vòng lặp này! (nếu có gọi tool thì nghĩa là vẫn đang làm việc)
                  - các phản hồi khi đang trong vòng lặp vẫn có thể phản hồi text nhưng cần kèm function calling để giữ cho vòng lặp sống!
-                 - các selector cho các tool **nên** sử dụng các selector gắn sẵn trong AriaSnapshot (runtime đã tính sẵn selector để unique nhất có thể)
+                 - các toạ độ cho các tool **nên** sử dụng các bbox gắn sẵn trong AriaSnapshot
                  - lịch sử các hành động cung cấp cho bạn 1 góc nhìn về quá trình thực hiện nhiệm vụ 1 cách liền mạch (bạn đóng vai như 1 statemachine)
 
                 Nhiệm vụ: \`${prompt}\`.

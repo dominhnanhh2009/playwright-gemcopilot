@@ -3,7 +3,7 @@ import * as readline from 'readline';
 
 export const askForHumanConfirmationTool: ToolDefinition = {
     name: 'askForHumanConfirmation',
-    description: 'Yêu cầu sự can thiệp của con người khi gặp khó khăn như CAPTCHA, xác thực 2 bước, hoặc các trang web phức tạp không thể tự động hóa.',
+    description: 'Yêu cầu sự can thiệp của con người khi gặp khó khăn như CAPTCHA, xác thực 2 bước, hoặc các trang web phức tạp không thể tự động hóa. Cần thiét phải xem xét gọi tool này trước khi kết thúc chuỗi hành động!',
     parameters: {
         type: 'object',
         properties: {
