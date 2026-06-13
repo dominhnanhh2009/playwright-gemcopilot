@@ -95,10 +95,16 @@ export class Brain implements IBrain {
                 await this.logDebug(logFilename, `[TURN ${turn} - PROMPT]\n${promptText}`);
             }
 
+            process.stdout.write("\x1b[2mrequest sent to API...\x1b[0m\r");
+            const startTime = Date.now();
             const result = await model.generateContent([
                 { text: promptText },
                 //{ inlineData: { mimeType: "image/png", data: screenshotBase64 } }
             ]);
+            const duration = Date.now() - startTime;
+            process.stdout.write(" ".repeat(40) + "\r");
+
+            console.log(`\x1b[2mLLM response in ${duration}ms\x1b[0m`);
 
             if (this.debug) {
                 await this.logDebug(logFilename, `[TURN ${turn} - RESPONSE]\n${JSON.stringify(result.response, null, 2)}`);
@@ -108,7 +114,7 @@ export class Brain implements IBrain {
 
             if (calls && calls.length > 0) {
                 const call = calls[0];
-                console.log("LLM Requested Tool:", call.name, call.args);
+                console.log(`\x1b[36m[ACTION]\x1b[0m \x1b[1m${call.name}\x1b[0m`, call.args);
 
                 const action: BrowserAction = {
                     type: call.name as BrowserAction['type'],
@@ -116,7 +122,7 @@ export class Brain implements IBrain {
                 } as BrowserAction;
 
                 const actionResult = await core.performAction(action);
-                console.log("Tool execution result:", actionResult);
+                console.log(`\x1b[32m[RESULT]\x1b[0m`, actionResult);
 
                 history.push({
                     call: { name: call.name, args: call.args as object },
@@ -126,7 +132,7 @@ export class Brain implements IBrain {
                 await new Promise(r => setTimeout(r, 2000));
             } else {
                 const finalResponse = result.response.text();
-                console.log("Agent Final Response:", finalResponse);
+                console.log(`\x1b[35m[FINAL]\x1b[0m ${finalResponse}`);
                 if (this.debug) {
                     await this.logDebug(logFilename, `[FINAL RESPONSE]\n${finalResponse}`);
                 }
