@@ -1,62 +1,119 @@
 {
   "page": {
-    "url": "file:///C:/Users/thuanvl/Desktop/codes/playwright-gemcopilot/testing/cases/edge.html"
+    "url": "about:blank"
   },
   "regions": [
     {
       "id": "r1",
       "role": "section",
-      "name": "Actions"
+      "label": "Actions"
     }
   ],
   "actions": [
     {
-      "role": "textbox",
-      "name": "readonlyField",
-      "selector": "input[name=\"readonlyField\"]",
-      "region": "r1",
-      "state": [
-        "readonly"
+      "id": "a1",
+      "kind": "button",
+      "label": "Save draft",
+      "selectors": [
+        "section[aria-label=\"Actions\"] > button:nth-of-type(1)",
+        "html > body > section[aria-label=\"Actions\"] > button:nth-of-type(1)"
       ],
-      "value": "abc",
-      "id": "a1"
+      "region": "r1"
     },
     {
-      "role": "checkbox",
-      "name": "agree",
-      "selector": "input[name=\"agree\"]",
+      "id": "a2",
+      "kind": "button",
+      "label": "Publish",
+      "selectors": [
+        "section[aria-label=\"Actions\"] > button:nth-of-type(2)",
+        "html > body > section[aria-label=\"Actions\"] > button:nth-of-type(2)"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a3",
+      "kind": "checkbox",
+      "label": "agree",
+      "selectors": [
+        "input[name=\"agree\"][type=\"checkbox\"]",
+        "input[name=\"agree\"]",
+        "input[type=\"checkbox\"]"
+      ],
       "region": "r1",
       "state": [
         "checked"
+      ]
+    },
+    {
+      "id": "a4",
+      "kind": "input",
+      "label": "readonlyField",
+      "value": "abc",
+      "selectors": [
+        "input[name=\"readonlyField\"][value=\"abc\"]",
+        "input[value=\"abc\"]",
+        "input[name=\"readonlyField\"]"
       ],
-      "id": "a2"
+      "region": "r1",
+      "state": [
+        "readonly"
+      ]
     },
     {
-      "role": "button",
-      "name": "Save draft",
-      "selector": "section[aria-label=\"Actions\"] button[type=\"submit\"]:nth-of-type(1)",
+      "id": "a5",
+      "kind": "button",
+      "label": "Inside wrapper",
+      "selectors": [
+        "button[data-testid=\"inside-wrapper\"]",
+        "[data-testid=\"inside-wrapper\"]",
+        "section[aria-label=\"Actions\"] > div.only-wrapper > div > button[data-testid=\"inside-wrapper\"]"
+      ],
+      "region": "r1"
+    }
+  ],
+  "content": [
+    {
+      "id": "c1",
+      "kind": "input",
+      "selectors": [
+        "input[name=\"agree\"][type=\"checkbox\"]",
+        "input[name=\"agree\"]",
+        "input[type=\"checkbox\"]"
+      ],
+      "textContent": "on",
       "region": "r1",
-      "id": "a3"
+      "actionLinked": true
     },
     {
-      "role": "button",
-      "name": "Publish",
-      "selector": "section[aria-label=\"Actions\"] button[type=\"submit\"]:nth-of-type(2)",
+      "id": "c2",
+      "kind": "input",
+      "selectors": [
+        "input[name=\"readonlyField\"][value=\"abc\"]",
+        "input[value=\"abc\"]",
+        "input[name=\"readonlyField\"]"
+      ],
+      "textContent": "abc",
       "region": "r1",
-      "id": "a4"
+      "actionLinked": true
     },
     {
-      "role": "button",
-      "name": "Inside wrapper",
-      "selector": "button[data-testid=\"inside-wrapper\"]",
-      "region": "r1",
-      "id": "a5"
+      "id": "c3",
+      "kind": "section",
+      "selectors": [
+        "section[aria-label=\"Actions\"]",
+        "html > body > section[aria-label=\"Actions\"]"
+      ],
+      "label": "Actions",
+      "textContent": "Inside wrapper"
     }
   ],
   "stats": {
     "rawCandidates": 5,
     "emittedActions": 5,
+    "rawContentCandidates": 3,
+    "emittedContentNodes": 3,
     "emittedRegions": 1,
-    "bytes": 916
+    "bytesBeforeTrim": 1859,
+    "bytes": 1882
   }
 }

@@ -1,145 +1,666 @@
 {
   "page": {
-    "url": "file:///C:/Users/thuanvl/Desktop/codes/playwright-gemcopilot/testing/cases/testlogin.html"
+    "url": "about:blank"
   },
   "regions": [
     {
       "id": "r1",
-      "role": "document"
+      "role": "banner",
+      "label": "banner"
     },
     {
       "id": "r2",
       "role": "navigation",
-      "name": "Navigation"
+      "label": "navigation"
     },
     {
       "id": "r3",
-      "role": "banner"
+      "role": "main",
+      "label": "Test login"
     },
     {
       "id": "r4",
-      "role": "main",
-      "name": "Test login"
+      "role": "contentinfo",
+      "label": "contentinfo"
     },
     {
       "id": "r5",
-      "role": "contentinfo"
+      "role": "navigation",
+      "label": "navigation"
     }
   ],
   "actions": [
     {
-      "role": "textbox",
-      "name": "Username",
-      "selector": "input#username",
-      "region": "r4",
-      "state": [
-        "editable"
+      "id": "a1",
+      "kind": "input",
+      "label": "Username",
+      "selectors": [
+        "input#username",
+        "#username",
+        "input[name=\"username\"][type=\"text\"]"
       ],
-      "id": "a1"
-    },
-    {
-      "role": "link",
-      "name": "Press \"Enter\" to skip to content",
-      "selector": "body#modern-store-modified > a:nth-of-type(1)",
-      "region": "r1",
-      "id": "a2"
-    },
-    {
-      "role": "link",
-      "name": "Home",
-      "selector": "li#menu-item-43 a",
-      "region": "r2",
-      "context": {
-        "role": "listitem"
-      },
-      "id": "a3"
-    },
-    {
-      "role": "link",
-      "name": "Practice",
-      "selector": "li#menu-item-20 a",
-      "region": "r2",
-      "context": {
-        "role": "listitem"
-      },
-      "id": "a4"
-    },
-    {
-      "role": "link",
-      "name": "Courses",
-      "selector": "li#menu-item-21 a",
-      "region": "r2",
-      "context": {
-        "role": "listitem"
-      },
-      "id": "a5"
-    },
-    {
-      "role": "link",
-      "name": "Blog",
-      "selector": "li#menu-item-19 a",
-      "region": "r2",
-      "context": {
-        "role": "listitem"
-      },
-      "id": "a6"
-    },
-    {
-      "role": "link",
-      "name": "Contact",
-      "selector": "li#menu-item-18 a",
-      "region": "r2",
-      "context": {
-        "role": "listitem"
-      },
-      "id": "a7"
-    },
-    {
-      "role": "button",
-      "name": "toggle-navigation",
-      "selector": "button#toggle-navigation",
       "region": "r3",
       "state": [
-        "collapsed"
-      ],
-      "id": "a8"
+        "editable"
+      ]
     },
     {
-      "role": "textbox",
-      "name": "Password",
-      "selector": "input#password",
-      "region": "r4",
+      "id": "a2",
+      "kind": "input",
+      "label": "Password",
+      "selectors": [
+        "input#password",
+        "#password",
+        "input[name=\"password\"][type=\"password\"]"
+      ],
+      "region": "r3",
       "state": [
         "editable"
+      ]
+    },
+    {
+      "id": "a3",
+      "kind": "link",
+      "label": "a",
+      "selectors": [
+        "a.custom-logo-link",
+        "div#site-title > a[href=\"https://practicetestautomation.com/\"]",
+        "#site-title > a[href=\"https://practicetestautomation.com/\"]"
       ],
-      "id": "a9"
+      "region": "r1"
     },
     {
-      "role": "button",
-      "name": "Submit",
-      "selector": "button#submit",
+      "id": "a4",
+      "kind": "button",
+      "label": "button",
+      "selectors": [
+        "div#close-mobile-menu > button",
+        "#close-mobile-menu > button",
+        "div#mobile-menu-container-inner > div#close-mobile-menu > button"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a5",
+      "kind": "link",
+      "label": "Home",
+      "selectors": [
+        "li#menu-item-43 > a[href=\"https://practicetestautomation.com/\"]",
+        "#menu-item-43 > a[href=\"https://practicetestautomation.com/\"]",
+        "ul#menu-primary-items > li#menu-item-43 > a[href=\"https://practicetestautomation.com/\"]"
+      ],
+      "region": "r2"
+    },
+    {
+      "id": "a6",
+      "kind": "link",
+      "label": "Practice",
+      "selectors": [
+        "a[href=\"https://practicetestautomation.com/practice/\"]",
+        "li#menu-item-20 > a[href=\"https://practicetestautomation.com/practice/\"]",
+        "#menu-item-20 > a[href=\"https://practicetestautomation.com/practice/\"]"
+      ],
+      "region": "r2"
+    },
+    {
+      "id": "a7",
+      "kind": "link",
+      "label": "Courses",
+      "selectors": [
+        "a[href=\"https://practicetestautomation.com/courses/\"]",
+        "li#menu-item-21 > a[href=\"https://practicetestautomation.com/courses/\"]",
+        "#menu-item-21 > a[href=\"https://practicetestautomation.com/courses/\"]"
+      ],
+      "region": "r2"
+    },
+    {
+      "id": "a8",
+      "kind": "link",
+      "label": "Blog",
+      "selectors": [
+        "a[href=\"https://practicetestautomation.com/blog/\"]",
+        "li#menu-item-19 > a[href=\"https://practicetestautomation.com/blog/\"]",
+        "#menu-item-19 > a[href=\"https://practicetestautomation.com/blog/\"]"
+      ],
+      "region": "r2"
+    },
+    {
+      "id": "a9",
+      "kind": "link",
+      "label": "Contact",
+      "selectors": [
+        "a[href=\"https://practicetestautomation.com/contact/\"]",
+        "li#menu-item-18 > a[href=\"https://practicetestautomation.com/contact/\"]",
+        "#menu-item-18 > a[href=\"https://practicetestautomation.com/contact/\"]"
+      ],
+      "region": "r2"
+    },
+    {
+      "id": "a10",
+      "kind": "button",
+      "label": "open menu",
+      "selectors": [
+        "button#toggle-navigation",
+        "#toggle-navigation",
+        "button[name=\"toggle-navigation\"]"
+      ],
+      "region": "r1",
+      "state": [
+        "collapsed"
+      ]
+    },
+    {
+      "id": "a11",
+      "kind": "link",
+      "label": "Press \"Enter\" to skip to content",
+      "selectors": [
+        "a[href=\"#main-container\"]",
+        "a.skip-content",
+        "html > body#modern-store-modified > a[href=\"#main-container\"]"
+      ]
+    },
+    {
+      "id": "a12",
+      "kind": "button",
+      "label": "Submit",
+      "selectors": [
+        "button#submit",
+        "#submit",
+        "button.btn"
+      ],
+      "region": "r3",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a13",
+      "kind": "link",
+      "label": "Practice Test Automation.",
+      "selectors": [
+        "footer#site-footer > div.design-credit > span > a[href=\"https://practicetestautomation.com/\"]",
+        "#site-footer > div.design-credit > span > a[href=\"https://practicetestautomation.com/\"]",
+        "div#max-width > footer#site-footer > div.design-credit > span > a[href=\"https://practicetestautomation.com/\"]"
+      ],
       "region": "r4",
-      "id": "a10"
+      "state": [
+        "occluded"
+      ]
     },
     {
-      "role": "link",
-      "name": "Practice Test Automation.",
-      "selector": "footer#site-footer a:nth-of-type(1)",
-      "region": "r5",
-      "id": "a11"
+      "id": "a14",
+      "kind": "link",
+      "label": "Privacy Policy",
+      "selectors": [
+        "a[href=\"https://practicetestautomation.com/privacy-policy/\"]",
+        "footer#site-footer > div.design-credit > span > a[href=\"https://practicetestautomation.com/privacy-policy/\"]",
+        "#site-footer > div.design-credit > span > a[href=\"https://practicetestautomation.com/privacy-policy/\"]"
+      ],
+      "region": "r4",
+      "state": [
+        "occluded"
+      ]
+    }
+  ],
+  "content": [
+    {
+      "id": "c1",
+      "kind": "heading",
+      "selectors": [
+        "section#login > h2",
+        "#login > h2",
+        "section#main-container > section#login > h2"
+      ],
+      "textContent": "Test login",
+      "region": "r3"
     },
     {
-      "role": "link",
-      "name": "Privacy Policy",
-      "selector": "footer#site-footer a:nth-of-type(2)",
-      "region": "r5",
-      "id": "a12"
+      "id": "c2",
+      "kind": "heading",
+      "selectors": [
+        "section#login > h5:nth-of-type(1)",
+        "#login > h5:nth-of-type(1)",
+        "section#main-container > section#login > h5:nth-of-type(1)"
+      ],
+      "textContentPreview": "Test case 1: Positiv",
+      "textContentLength": 32,
+      "region": "r3"
+    },
+    {
+      "id": "c3",
+      "kind": "heading",
+      "selectors": [
+        "section#login > h5:nth-of-type(2)",
+        "#login > h5:nth-of-type(2)",
+        "section#main-container > section#login > h5:nth-of-type(2)"
+      ],
+      "textContentPreview": "Test case 2: Negativ",
+      "textContentLength": 35,
+      "region": "r3"
+    },
+    {
+      "id": "c4",
+      "kind": "heading",
+      "selectors": [
+        "section#login > h5:nth-of-type(3)",
+        "#login > h5:nth-of-type(3)",
+        "section#main-container > section#login > h5:nth-of-type(3)"
+      ],
+      "textContentPreview": "Test case 3: Negativ",
+      "textContentLength": 35,
+      "region": "r3"
+    },
+    {
+      "id": "c5",
+      "kind": "listitem",
+      "selectors": [
+        "li#menu-item-43",
+        "#menu-item-43",
+        "ul#menu-primary-items > li#menu-item-43"
+      ],
+      "textContent": "Home",
+      "region": "r2"
+    },
+    {
+      "id": "c6",
+      "kind": "listitem",
+      "selectors": [
+        "li#menu-item-20",
+        "#menu-item-20",
+        "ul#menu-primary-items > li#menu-item-20"
+      ],
+      "textContent": "Practice",
+      "region": "r2"
+    },
+    {
+      "id": "c7",
+      "kind": "listitem",
+      "selectors": [
+        "li#menu-item-21",
+        "#menu-item-21",
+        "ul#menu-primary-items > li#menu-item-21"
+      ],
+      "textContent": "Courses",
+      "region": "r2"
+    },
+    {
+      "id": "c8",
+      "kind": "listitem",
+      "selectors": [
+        "li#menu-item-19",
+        "#menu-item-19",
+        "ul#menu-primary-items > li#menu-item-19"
+      ],
+      "textContent": "Blog",
+      "region": "r2"
+    },
+    {
+      "id": "c9",
+      "kind": "listitem",
+      "selectors": [
+        "li#menu-item-18",
+        "#menu-item-18",
+        "ul#menu-primary-items > li#menu-item-18"
+      ],
+      "textContent": "Contact",
+      "region": "r2"
+    },
+    {
+      "id": "c10",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"username\"]",
+        "div#form > div:nth-of-type(1) > label[for=\"username\"]",
+        "#form > div:nth-of-type(1) > label[for=\"username\"]"
+      ],
+      "textContent": "Username",
+      "region": "r3"
+    },
+    {
+      "id": "c11",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"password\"]",
+        "div#form > div:nth-of-type(2) > label[for=\"password\"]",
+        "#form > div:nth-of-type(2) > label[for=\"password\"]"
+      ],
+      "textContent": "Password",
+      "region": "r3"
+    },
+    {
+      "id": "c12",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(1) > li:nth-of-type(1)",
+        "#login > ol:nth-of-type(1) > li:nth-of-type(1)",
+        "section#main-container > section#login > ol:nth-of-type(1) > li:nth-of-type(1)"
+      ],
+      "textContent": "Open page",
+      "region": "r3"
+    },
+    {
+      "id": "c13",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(1) > li:nth-of-type(4)",
+        "#login > ol:nth-of-type(1) > li:nth-of-type(4)",
+        "section#main-container > section#login > ol:nth-of-type(1) > li:nth-of-type(4)"
+      ],
+      "textContent": "Push Submit button",
+      "region": "r3"
+    },
+    {
+      "id": "c14",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(2) > li:nth-of-type(1)",
+        "#login > ol:nth-of-type(2) > li:nth-of-type(1)",
+        "section#main-container > section#login > ol:nth-of-type(2) > li:nth-of-type(1)"
+      ],
+      "textContent": "Open page",
+      "region": "r3"
+    },
+    {
+      "id": "c15",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(2) > li:nth-of-type(4)",
+        "#login > ol:nth-of-type(2) > li:nth-of-type(4)",
+        "section#main-container > section#login > ol:nth-of-type(2) > li:nth-of-type(4)"
+      ],
+      "textContent": "Push Submit button",
+      "region": "r3"
+    },
+    {
+      "id": "c16",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(3) > li:nth-of-type(1)",
+        "#login > ol:nth-of-type(3) > li:nth-of-type(1)",
+        "section#main-container > section#login > ol:nth-of-type(3) > li:nth-of-type(1)"
+      ],
+      "textContent": "Open page",
+      "region": "r3"
+    },
+    {
+      "id": "c17",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(3) > li:nth-of-type(4)",
+        "#login > ol:nth-of-type(3) > li:nth-of-type(4)",
+        "section#main-container > section#login > ol:nth-of-type(3) > li:nth-of-type(4)"
+      ],
+      "textContent": "Push Submit button",
+      "region": "r3"
+    },
+    {
+      "id": "c18",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ul > li:nth-of-type(1)",
+        "#login > ul > li:nth-of-type(1)",
+        "section#main-container > section#login > ul > li:nth-of-type(1)"
+      ],
+      "textContentPreview": "This is a simple Log",
+      "textContentLength": 211,
+      "region": "r3"
+    },
+    {
+      "id": "c19",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ul > li:nth-of-type(2)",
+        "#login > ul > li:nth-of-type(2)",
+        "section#main-container > section#login > ul > li:nth-of-type(2)"
+      ],
+      "textContentPreview": "Use next credentials",
+      "textContentLength": 78,
+      "region": "r3"
+    },
+    {
+      "id": "c20",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(1) > li:nth-of-type(2)",
+        "#login > ol:nth-of-type(1) > li:nth-of-type(2)",
+        "section#main-container > section#login > ol:nth-of-type(1) > li:nth-of-type(2)"
+      ],
+      "textContentPreview": "Type username studen",
+      "textContentLength": 41,
+      "region": "r3"
+    },
+    {
+      "id": "c21",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(1) > li:nth-of-type(3)",
+        "#login > ol:nth-of-type(1) > li:nth-of-type(3)",
+        "section#main-container > section#login > ol:nth-of-type(1) > li:nth-of-type(3)"
+      ],
+      "textContentPreview": "Type password Passwo",
+      "textContentLength": 45,
+      "region": "r3"
+    },
+    {
+      "id": "c22",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(1) > li:nth-of-type(5)",
+        "#login > ol:nth-of-type(1) > li:nth-of-type(5)",
+        "section#main-container > section#login > ol:nth-of-type(1) > li:nth-of-type(5)"
+      ],
+      "textContentPreview": "Verify new page URL ",
+      "textContentLength": 79,
+      "region": "r3"
+    },
+    {
+      "id": "c23",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(1) > li:nth-of-type(6)",
+        "#login > ol:nth-of-type(1) > li:nth-of-type(6)",
+        "section#main-container > section#login > ol:nth-of-type(1) > li:nth-of-type(6)"
+      ],
+      "textContentPreview": "Verify new page cont",
+      "textContentLength": 86,
+      "region": "r3"
+    },
+    {
+      "id": "c24",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(1) > li:nth-of-type(7)",
+        "#login > ol:nth-of-type(1) > li:nth-of-type(7)",
+        "section#main-container > section#login > ol:nth-of-type(1) > li:nth-of-type(7)"
+      ],
+      "textContentPreview": "Verify button Log ou",
+      "textContentLength": 50,
+      "region": "r3"
+    },
+    {
+      "id": "c25",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(2) > li:nth-of-type(2)",
+        "#login > ol:nth-of-type(2) > li:nth-of-type(2)",
+        "section#main-container > section#login > ol:nth-of-type(2) > li:nth-of-type(2)"
+      ],
+      "textContentPreview": "Type username incorr",
+      "textContentLength": 47,
+      "region": "r3"
+    },
+    {
+      "id": "c26",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(2) > li:nth-of-type(3)",
+        "#login > ol:nth-of-type(2) > li:nth-of-type(3)",
+        "section#main-container > section#login > ol:nth-of-type(2) > li:nth-of-type(3)"
+      ],
+      "textContentPreview": "Type password Passwo",
+      "textContentLength": 45,
+      "region": "r3"
+    },
+    {
+      "id": "c27",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(2) > li:nth-of-type(5)",
+        "#login > ol:nth-of-type(2) > li:nth-of-type(5)",
+        "section#main-container > section#login > ol:nth-of-type(2) > li:nth-of-type(5)"
+      ],
+      "textContentPreview": "Verify error message",
+      "textContentLength": 33,
+      "region": "r3"
+    },
+    {
+      "id": "c28",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(2) > li:nth-of-type(6)",
+        "#login > ol:nth-of-type(2) > li:nth-of-type(6)",
+        "section#main-container > section#login > ol:nth-of-type(2) > li:nth-of-type(6)"
+      ],
+      "textContentPreview": "Verify error message",
+      "textContentLength": 54,
+      "region": "r3"
+    },
+    {
+      "id": "c29",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(3) > li:nth-of-type(2)",
+        "#login > ol:nth-of-type(3) > li:nth-of-type(2)",
+        "section#main-container > section#login > ol:nth-of-type(3) > li:nth-of-type(2)"
+      ],
+      "textContentPreview": "Type username studen",
+      "textContentLength": 41,
+      "region": "r3"
+    },
+    {
+      "id": "c30",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(3) > li:nth-of-type(3)",
+        "#login > ol:nth-of-type(3) > li:nth-of-type(3)",
+        "section#main-container > section#login > ol:nth-of-type(3) > li:nth-of-type(3)"
+      ],
+      "textContentPreview": "Type password incorr",
+      "textContentLength": 51,
+      "region": "r3"
+    },
+    {
+      "id": "c31",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(3) > li:nth-of-type(5)",
+        "#login > ol:nth-of-type(3) > li:nth-of-type(5)",
+        "section#main-container > section#login > ol:nth-of-type(3) > li:nth-of-type(5)"
+      ],
+      "textContentPreview": "Verify error message",
+      "textContentLength": 33,
+      "region": "r3"
+    },
+    {
+      "id": "c32",
+      "kind": "listitem",
+      "selectors": [
+        "section#login > ol:nth-of-type(3) > li:nth-of-type(6)",
+        "#login > ol:nth-of-type(3) > li:nth-of-type(6)",
+        "section#main-container > section#login > ol:nth-of-type(3) > li:nth-of-type(6)"
+      ],
+      "textContentPreview": "Verify error message",
+      "textContentLength": 54,
+      "region": "r3"
+    },
+    {
+      "id": "c33",
+      "kind": "span",
+      "selectors": [
+        "span.screen-reader-text",
+        "button#toggle-navigation > span.screen-reader-text",
+        "#toggle-navigation > span.screen-reader-text"
+      ],
+      "textContent": "open menu",
+      "region": "r1"
+    },
+    {
+      "id": "c34",
+      "kind": "span",
+      "selectors": [
+        "footer#site-footer > div.design-credit > span",
+        "#site-footer > div.design-credit > span",
+        "div#max-width > footer#site-footer > div.design-credit > span"
+      ],
+      "textContentPreview": "© Copyright 2020 Pra",
+      "textContentLength": 79,
+      "region": "r4"
+    },
+    {
+      "id": "c35",
+      "kind": "navigation",
+      "selectors": [
+        "nav.menu",
+        "div#menu-primary > nav.menu",
+        "#menu-primary > nav.menu"
+      ],
+      "textContentPreview": "Home Practice Course",
+      "textContentLength": 34,
+      "region": "r5"
+    },
+    {
+      "id": "c36",
+      "kind": "section",
+      "selectors": [
+        "section#login",
+        "#login",
+        "section#main-container > section#login"
+      ],
+      "textContentPreview": "Test login This is a",
+      "textContentLength": 330,
+      "region": "r3"
+    },
+    {
+      "id": "c37",
+      "kind": "banner",
+      "selectors": [
+        "header#site-header",
+        "#site-header",
+        "header[role=\"banner\"]"
+      ],
+      "textContentPreview": "Home Practice Course",
+      "textContentLength": 40
+    },
+    {
+      "id": "c38",
+      "kind": "main",
+      "selectors": [
+        "section#main-container",
+        "#main-container",
+        "section[role=\"main\"]"
+      ],
+      "textContentPreview": "Test login This is a",
+      "textContentLength": 40
+    },
+    {
+      "id": "c39",
+      "kind": "contentinfo",
+      "selectors": [
+        "footer#site-footer",
+        "#site-footer",
+        "footer[role=\"contentinfo\"]"
+      ],
+      "textContentPreview": "© Copyright 2020 Pra",
+      "textContentLength": 40
     }
   ],
   "stats": {
     "rawCandidates": 14,
-    "emittedActions": 12,
+    "emittedActions": 14,
+    "rawContentCandidates": 39,
+    "emittedContentNodes": 39,
     "emittedRegions": 5,
-    "bytes": 1804
+    "bytesBeforeTrim": 13708,
+    "bytes": 13732
   }
 }

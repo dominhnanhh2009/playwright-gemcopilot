@@ -1,19 +1,28 @@
 {
   "page": {
-    "url": "file:///C:/Users/thuanvl/Desktop/codes/playwright-gemcopilot/testing/cases/wrapper.html"
+    "url": "about:blank"
   },
+  "regions": [],
   "actions": [
     {
-      "role": "button",
-      "name": "Search",
-      "selector": "button[data-testid=\"search-btn\"]",
-      "id": "a1"
+      "id": "a1",
+      "kind": "button",
+      "label": "Search",
+      "selectors": [
+        "button[data-testid=\"search-btn\"]",
+        "[data-testid=\"search-btn\"]",
+        "div.MuiBox-root > div > div > button[data-testid=\"search-btn\"]"
+      ]
     }
   ],
+  "content": [],
   "stats": {
     "rawCandidates": 1,
     "emittedActions": 1,
+    "rawContentCandidates": 0,
+    "emittedContentNodes": 0,
     "emittedRegions": 0,
-    "bytes": 288
+    "bytesBeforeTrim": 377,
+    "bytes": 399
   }
 }

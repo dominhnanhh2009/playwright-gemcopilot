@@ -1,35 +1,70 @@
 {
   "page": {
-    "url": "file:///C:/Users/thuanvl/Desktop/codes/playwright-gemcopilot/testing/cases/modal.html"
+    "url": "about:blank"
   },
   "regions": [
     {
       "id": "r1",
       "role": "dialog",
-      "name": "Delete project",
-      "description": "Delete project? This action cannot be undone."
+      "label": "Delete project"
     }
   ],
   "actions": [
     {
-      "role": "button",
-      "name": "Cancel",
-      "selector": "div[role=\"dialog\"][aria-label=\"Delete project\"] button:nth-of-type(1)",
-      "region": "r1",
-      "id": "a1"
+      "id": "a1",
+      "kind": "button",
+      "label": "Cancel",
+      "selectors": [
+        "div[aria-label=\"Delete project\"] > div.modal-wrapper > button:nth-of-type(1)",
+        "div[aria-label=\"Delete project\"][role=\"dialog\"] > div.modal-wrapper > button:nth-of-type(1)",
+        "div.modal-wrapper > button:nth-of-type(1)"
+      ],
+      "region": "r1"
     },
     {
-      "role": "button",
-      "name": "Delete",
-      "selector": "button[data-cy=\"confirm-delete\"]",
-      "region": "r1",
-      "id": "a2"
+      "id": "a2",
+      "kind": "button",
+      "label": "Delete",
+      "selectors": [
+        "button[data-cy=\"confirm-delete\"]",
+        "[data-cy=\"confirm-delete\"]",
+        "button.danger"
+      ],
+      "region": "r1"
+    }
+  ],
+  "content": [
+    {
+      "id": "c1",
+      "kind": "heading",
+      "selectors": [
+        "div[aria-label=\"Delete project\"] > div.modal-wrapper > h2",
+        "div[aria-label=\"Delete project\"][role=\"dialog\"] > div.modal-wrapper > h2",
+        "div.modal-wrapper > h2"
+      ],
+      "textContent": "Delete project?",
+      "region": "r1"
+    },
+    {
+      "id": "c2",
+      "kind": "paragraph",
+      "selectors": [
+        "div[aria-label=\"Delete project\"] > div.modal-wrapper > p",
+        "div[aria-label=\"Delete project\"][role=\"dialog\"] > div.modal-wrapper > p",
+        "div.modal-wrapper > p"
+      ],
+      "textContentPreview": "This action cannot b",
+      "textContentLength": 29,
+      "region": "r1"
     }
   ],
   "stats": {
     "rawCandidates": 2,
     "emittedActions": 2,
+    "rawContentCandidates": 2,
+    "emittedContentNodes": 2,
     "emittedRegions": 1,
-    "bytes": 571
+    "bytesBeforeTrim": 1231,
+    "bytes": 1254
   }
 }

@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semantic UI Tree Test Fixture</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f6f1e7;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header, nav, main, aside, footer, section, article, form, table, dialog {
+      box-sizing: border-box;
+    }
+
+    header {
+      padding: 24px 32px;
+      background: #1f3a5f;
+      color: white;
+    }
+
+    nav {
+      padding: 12px 32px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    main {
+      padding: 32px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 24px;
+    }
+
+    aside {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      align-self: start;
+    }
+
+    section, article, form, .panel, .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 0;
+    }
+
+    button, input, textarea, select, a[role="button"], [contenteditable="true"] {
+      font: inherit;
+    }
+
+    button, a.button-like {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #1f3a5f;
+      background: #1f3a5f;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: white;
+      color: #1f3a5f;
+    }
+
+    button.danger {
+      background: #8a1f1f;
+      border-color: #8a1f1f;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 12px 0 6px;
+    }
+
+    input, textarea, select, [contenteditable="true"] {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 38px;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: white;
+      color: #172033;
+    }
+
+    textarea {
+      min-height: 84px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .muted {
+      color: #667085;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .display-none {
+      display: none;
+    }
+
+    .visibility-hidden {
+      visibility: hidden;
+    }
+
+    .occluder-wrap {
+      position: relative;
+      min-height: 96px;
+      border: 1px dashed #aaa;
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .occluded-button {
+      position: absolute;
+      left: 24px;
+      top: 24px;
+    }
+
+    .overlay {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 220px;
+      height: 58px;
+      background: rgba(31, 58, 95, 0.85);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      z-index: 2;
+      pointer-events: auto;
+    }
+
+    dialog {
+      border: 1px solid #bbb;
+      border-radius: 16px;
+      padding: 24px;
+      width: min(520px, calc(100vw - 48px));
+    }
+
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    footer {
+      padding: 24px 32px;
+      background: #172033;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header role="banner" aria-label="Site header">
+    <h1>Semantic UI Tree Test Fixture</h1>
+    <p>Header short.</p>
+    <p>This header paragraph is intentionally longer than twenty characters so the content preview and content length fields can be tested.</p>
+  </header>
+
+  <nav aria-label="Primary navigation">
+    <a href="#content">Skip to content</a>
+    <a href="#overview">Overview</a>
+    <a href="#forms">Forms</a>
+    <a href="#table">Table</a>
+    <a href="#dialog-zone" role="button" class="button-like">Open dialog link</a>
+    <button aria-label="Open account menu">☰</button>
+  </nav>
+
+  <main id="content" role="main" aria-label="Main test area">
+    <div>
+      <section id="overview" aria-label="Content elements section">
+        <h2>Content Elements</h2>
+        <h3>Short heading</h3>
+        <h4>This heading is deliberately longer than twenty characters</h4>
+        <p>Short paragraph.</p>
+        <p id="long-paragraph">This paragraph contains more than twenty characters and should be represented using textContentPreview plus textContentLength, not full textContent.</p>
+        <span>Short span</span>
+        <span>This span is deliberately long enough to trigger preview mode.</span>
+        <blockquote cite="https://example.com">A quoted block with enough words to be longer than twenty characters.</blockquote>
+        <pre>const answer = 42;</pre>
+        <code>inlineCode()</code>
+        <figure>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='120'%3E%3Crect width='320' height='120' fill='%23ddd'/%3E%3Ctext x='20' y='65' font-size='20'%3EFixture image%3C/text%3E%3C/svg%3E" alt="Fixture image alt text" />
+          <figcaption>This figure caption is long enough to require preview fields.</figcaption>
+        </figure>
+        <details open>
+          <summary>Expandable summary text is also content</summary>
+          <p>Details body content is visible and should be included.</p>
+        </details>
+      </section>
+
+      <section id="buttons" aria-label="Action elements section">
+        <h2>Action Elements</h2>
+        <button id="save-button">Save</button>
+        <button class="secondary">Cancel operation with a long visible button label</button>
+        <button class="danger" aria-label="Delete selected record">×</button>
+        <button title="Refresh data from server"><span aria-hidden="true">↻</span></button>
+        <button data-testid="export-csv-button">Export CSV</button>
+        <a href="/settings" title="Go to settings page">Settings</a>
+        <div role="button" tabindex="0" aria-label="Custom div button">Custom div action</div>
+      </section>
+
+      <section id="forms" aria-label="Form controls section">
+        <h2>Form Controls</h2>
+        <form id="signup-form" aria-label="Signup form">
+          <label for="email-input">Email address</label>
+          <input id="email-input" name="email" type="email" value="linh@example.com" autocomplete="email" />
+
+          <label>
+            Full name from wrapping label
+            <input name="fullName" type="text" value="Nguyen Van A" />
+          </label>
+
+          <label for="query-input">Search query</label>
+          <input id="query-input" name="q" placeholder="Search products" value="computer vision model for UI automation" />
+
+          <label for="bio-textarea">Biography</label>
+          <textarea id="bio-textarea" name="bio">This textarea value is longer than twenty characters and should use preview plus length.</textarea>
+
+          <label for="role-select">Role</label>
+          <select id="role-select" name="role">
+            <option value="teacher">Teacher</option>
+            <option value="developer" selected>Developer with a long option label</option>
+          </select>
+
+          <label>
+            <input type="checkbox" name="agree" checked />
+            I agree to the terms and conditions
+          </label>
+
+          <label>
+            <input type="radio" name="plan" value="basic" />
+            Basic plan
+          </label>
+
+          <label>
+            <input type="radio" name="plan" value="pro" checked />
+            Pro plan
+          </label>
+
+          <input type="hidden" name="csrf" value="hidden-token-should-not-appear" />
+          <button type="submit">Create account</button>
+        </form>
+      </section>
+
+      <section id="editable" aria-label="Editable content section">
+        <h2>Editable Content</h2>
+        <div role="textbox" contenteditable="true" aria-label="Editable notes">Editable note content longer than twenty characters.</div>
+        <output name="result">42</output>
+        <div aria-live="polite">Live status message longer than twenty characters.</div>
+        <div role="alert">Alert text with more than twenty characters.</div>
+      </section>
+
+      <section id="lists" aria-label="Lists section">
+        <h2>Lists</h2>
+        <ul>
+          <li>Short item</li>
+          <li>Second list item with a much longer text content for preview testing.</li>
+          <li>
+            Item with action
+            <button aria-label="Edit second task">Edit</button>
+          </li>
+        </ul>
+        <dl>
+          <dt>Term</dt>
+          <dd>Definition text that is longer than twenty characters.</dd>
+        </dl>
+      </section>
+
+      <section id="cards" aria-label="Cards section">
+        <h2>Cards and Groups</h2>
+        <div class="cards">
+          <article aria-label="Product card Alpha">
+            <h3>Alpha Camera</h3>
+            <p>Compact camera card description longer than twenty characters.</p>
+            <button>Add Alpha</button>
+          </article>
+          <article aria-labelledby="beta-title">
+            <h3 id="beta-title">Beta Sensor</h3>
+            <p>Beta card text that should become group context around the button.</p>
+            <button>Add Beta</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="table" aria-label="Table section">
+        <h2>Table</h2>
+        <table aria-label="Orders table">
+          <caption>Recent orders caption with more than twenty characters.</caption>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#1001</td>
+              <td>Short name</td>
+              <td>Pending confirmation from warehouse</td>
+              <td><button>Approve</button></td>
+            </tr>
+            <tr>
+              <td>#1002</td>
+              <td>Customer with a very long display name</td>
+              <td>Shipped</td>
+              <td><button>View details</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="hidden-tests" aria-label="Hidden elements section">
+        <h2>Hidden Elements</h2>
+        <p class="display-none">Display none text should not be visible.</p>
+        <p class="visibility-hidden">Visibility hidden text should not be visible.</p>
+        <div aria-hidden="true">
+          <p>Aria hidden text should not be visible.</p>
+          <button>Hidden button</button>
+        </div>
+        <p class="visually-hidden">Visually hidden but not aria-hidden text may still be semantically present.</p>
+      </section>
+
+      <section id="occlusion" aria-label="Occlusion section">
+        <h2>Occlusion</h2>
+        <div class="occluder-wrap">
+          <button class="occluded-button">Covered button</button>
+          <div class="overlay">Overlay covers button</div>
+        </div>
+      </section>
+
+      <section id="dialog-zone" aria-label="Dialog section">
+        <h2>Dialog Zone</h2>
+        <button id="show-dialog">Show dialog</button>
+        <dialog id="fixture-dialog" role="dialog" aria-label="Fixture dialog" open>
+          <h2>Visible Dialog</h2>
+          <p>This dialog paragraph is longer than twenty characters.</p>
+          <button>Confirm dialog</button>
+          <button class="secondary">Close dialog</button>
+        </dialog>
+      </section>
+    </div>
+
+    <aside aria-label="Sidebar notes">
+      <h2>Sidebar</h2>
+      <p>Short side.</p>
+      <p>This sidebar note is intentionally long enough to trigger text preview mode.</p>
+      <button>Sidebar action</button>
+    </aside>
+  </main>
+
+  <footer role="contentinfo" aria-label="Footer">
+    <p>Footer short.</p>
+    <p>This footer paragraph is also deliberately longer than twenty characters.</p>
+  </footer>
+
+  <script>
+    document.getElementById('show-dialog')?.addEventListener('click', () => {
+      const d = document.getElementById('fixture-dialog');
+      if (d && typeof d.showModal === 'function' && !d.open) d.showModal();
+    });
+  </script>
+</body>
+</html>

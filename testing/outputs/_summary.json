@@ -3,42 +3,48 @@
     "file": "basic.html",
     "actions": 3,
     "regions": 1,
-    "bytes": 586
+    "bytes": 1187
   },
   {
     "file": "edge.html",
     "actions": 5,
     "regions": 1,
-    "bytes": 916
+    "bytes": 1882
   },
   {
     "file": "modal.html",
     "actions": 2,
     "regions": 1,
-    "bytes": 571
+    "bytes": 1254
   },
   {
     "file": "table.html",
     "actions": 2,
     "regions": 0,
-    "bytes": 482
+    "bytes": 1399
   },
   {
     "file": "table_complex.html",
     "actions": 1,
     "regions": 1,
-    "bytes": 450
+    "bytes": 1576
+  },
+  {
+    "file": "test-content.html",
+    "actions": 33,
+    "regions": 12,
+    "bytes": 31634
   },
   {
     "file": "testlogin.html",
-    "actions": 12,
+    "actions": 14,
     "regions": 5,
-    "bytes": 1804
+    "bytes": 13732
   },
   {
     "file": "wrapper.html",
     "actions": 1,
     "regions": 0,
-    "bytes": 288
+    "bytes": 399
   }
 ]

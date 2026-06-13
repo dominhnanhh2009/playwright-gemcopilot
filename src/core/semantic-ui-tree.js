@@ -1,19 +1,25 @@
-// semantic-ui-tree.js
-// ESM, self-contained, safe for: page.evaluate(makeSemanticUiTree)
-// Usage from TS/ESM:
-//   import { makeSemanticUiTree } from './semantic-ui-tree.js';
-//   const tree = await page.evaluate(makeSemanticUiTree);
+// semantic-ui-tree-clean-final-actions-no-text.js
+// Clean rebuild. ESM, self-contained, safe for: page.evaluate(makeSemanticUiTree)
+// Output schema uses `selectors: string[]` only. Actions never emit textContent fields.
+// Usage:
+//   import { makeSemanticUiTree } from './semantic-ui-tree-clean-final.js';
+//   const tree = await page.evaluate(makeSemanticUiTree, { maxBytes: 30000 });
 
 export function makeSemanticUiTree(options = {}) {
   const cfg = {
-    maxActions: Number.isFinite(options.maxActions) ? options.maxActions : 80,
-    maxRegions: Number.isFinite(options.maxRegions) ? options.maxRegions : 12,
-    maxBytes: Number.isFinite(options.maxBytes) ? options.maxBytes : 5000,
+    maxActions: Number.isFinite(options.maxActions) ? options.maxActions : 100,
+    maxRegions: Number.isFinite(options.maxRegions) ? options.maxRegions : 20,
+    maxContentNodes: Number.isFinite(options.maxContentNodes) ? options.maxContentNodes : 120,
+    maxSelectorsPerNode: Number.isFinite(options.maxSelectorsPerNode) ? options.maxSelectorsPerNode : 3,
+    maxBytes: Number.isFinite(options.maxBytes) ? options.maxBytes : 30000,
+    strictMaxBytes: options.strictMaxBytes === true,
     labelLimit: Number.isFinite(options.labelLimit) ? options.labelLimit : 90,
-    contextLimit: Number.isFinite(options.contextLimit) ? options.contextLimit : 180,
+    textPreviewLimit: Number.isFinite(options.textPreviewLimit) ? options.textPreviewLimit : 20,
+    contentTextLimit: Number.isFinite(options.contentTextLimit) ? options.contentTextLimit : 5000,
+    includeRegionForContent: options.includeRegionForContent !== false,
   };
 
-  const ACTION_SELECTOR = [
+  const ACTION_CSS = [
     'button',
     'a[href]',
     'input',
@@ -32,7 +38,7 @@ export function makeSemanticUiTree(options = {}) {
     '[onclick]',
   ].join(',');
 
-  const REGION_SELECTOR = [
+  const REGION_CSS = [
     'main',
     'nav',
     'header',
@@ -51,20 +57,68 @@ export function makeSemanticUiTree(options = {}) {
     '[role="form"]',
   ].join(',');
 
-  function cleanText(s, limit = cfg.labelLimit) {
+  const CONTENT_CSS = [
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'p',
+    'span',
+    'label',
+    'legend',
+    'figcaption',
+    'summary',
+    'blockquote',
+    'pre',
+    'code',
+    'li',
+    'dt',
+    'dd',
+    'td',
+    'th',
+    'caption',
+    'output',
+    'input',
+    'textarea',
+    'select',
+    'option',
+    'article',
+    'section',
+    'main',
+    'aside',
+    'header',
+    'footer',
+    'nav',
+    '[contenteditable="true"]',
+    '[role="heading"]',
+    '[role="paragraph"]',
+    '[role="listitem"]',
+    '[role="cell"]',
+    '[role="rowheader"]',
+    '[role="columnheader"]',
+    '[role="status"]',
+    '[role="alert"]',
+    '[aria-live]',
+  ].join(',');
+
+  function isElement(x) {
+    return x instanceof Element;
+  }
+
+  function cleanText(s, limit = Infinity) {
     if (s == null) return undefined;
     const t = String(s).replace(/\s+/g, ' ').trim();
     if (!t) return undefined;
     return t.length > limit ? t.slice(0, Math.max(0, limit - 1)) + '…' : t;
   }
 
-  function cssEscape(value) {
-    if (window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(value);
-    return String(value).replace(/[^a-zA-Z0-9_-]/g, '\\$&');
-  }
-
-  function isElement(x) {
-    return x instanceof Element;
+  function fullCleanText(s, limit = cfg.contentTextLimit) {
+    if (s == null) return undefined;
+    const t = String(s).replace(/\s+/g, ' ').trim();
+    if (!t) return undefined;
+    return t.length > limit ? t.slice(0, limit) : t;
   }
 
   function hasHiddenAncestor(el) {
@@ -79,58 +133,262 @@ export function makeSemanticUiTree(options = {}) {
 
   function isVisible(el) {
     if (!isElement(el) || hasHiddenAncestor(el)) return false;
-    const rect = el.getBoundingClientRect();
+    const tag = el.tagName.toLowerCase();
+    if (tag === 'input' && (el.getAttribute('type') || '').toLowerCase() === 'hidden') return false;
     const st = window.getComputedStyle(el);
     if (st.display === 'none' || st.visibility === 'hidden' || st.opacity === '0') return false;
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 || rect.height > 0 || !!contentText(el, 20);
+  }
+
+  function cssString(value) {
+    return JSON.stringify(String(value));
+  }
+
+  function cssIdent(value) {
+    if (window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(String(value));
+    return String(value).replace(/[^a-zA-Z0-9_-]/g, '\\$&');
+  }
+
+  function attr(name, value) {
+    return `[${name}=${cssString(value)}]`;
+  }
+
+  function queryAll(css) {
+    try {
+      return Array.from(document.querySelectorAll(css));
+    } catch {
+      return [];
+    }
+  }
+
+  function hitsExactly(css, el) {
+    const hits = queryAll(css);
+    return hits.length === 1 && hits[0] === el;
+  }
+
+  function addCandidate(list, css, score) {
+    if (!css || list.some((x) => x.css === css)) return;
+    list.push({ css, score });
+  }
+
+  function stableAttrValue(el, name, max = 180) {
+    const raw = el.getAttribute(name);
+    if (raw == null) return undefined;
+    const value = String(raw).replace(/\s+/g, ' ').trim();
+    if (!value || value.length > max) return undefined;
+    return value;
+  }
+
+  function isStableId(id) {
+    if (!id) return false;
+    if (id.length > 80) return false;
+    if (/^(:r|radix-|headlessui-|react-aria-|ember\d+|mui-|chakra-|mantine-|rc_|rc-)/i.test(id)) return false;
+    if (/^[a-f0-9]{8,}$/i.test(id)) return false;
+    if (/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id)) return false;
+    if (/\d{8,}/.test(id)) return false;
+    return true;
+  }
+
+  function stableClassTokens(el) {
+    const cls = typeof el.className === 'string' ? el.className : '';
+    if (!cls) return [];
+    return cls
+      .split(/\s+/)
+      .filter(Boolean)
+      .filter((c) => c.length <= 40)
+      .filter((c) => !/^[a-z0-9_-]*[0-9a-f]{6,}[a-z0-9_-]*$/i.test(c))
+      .filter((c) => !/^(active|selected|disabled|open|closed|focus|focused|hover|ng-|css-|sc-|jss|makeStyles|emotion-|__)/i.test(c))
+      .slice(0, 3);
+  }
+
+  function directCssCandidates(el) {
     const tag = el.tagName.toLowerCase();
-    if (tag === 'input' && el.type === 'hidden') return false;
-    return rect.width > 0 || rect.height > 0 || !!cleanText(el.textContent, 20);
+    const out = [];
+
+    for (const a of ['data-testid', 'data-test-id', 'data-cy', 'data-test', 'data-qa', 'data-automation-id']) {
+      const v = stableAttrValue(el, a);
+      if (!v) continue;
+      addCandidate(out, `${tag}${attr(a, v)}`, 100);
+      addCandidate(out, attr(a, v), 98);
+    }
+
+    const id = stableAttrValue(el, 'id');
+    if (isStableId(id)) {
+      addCandidate(out, `${tag}#${cssIdent(id)}`, 96);
+      addCandidate(out, `#${cssIdent(id)}`, 94);
+    }
+
+    const attrs = [
+      'aria-label',
+      'aria-labelledby',
+      'name',
+      'placeholder',
+      'title',
+      'alt',
+      'role',
+      'type',
+      'value',
+      'autocomplete',
+      'href',
+      'for',
+    ];
+
+    for (const a of attrs) {
+      const v = stableAttrValue(el, a);
+      if (!v) continue;
+      let score = 60;
+      if (a === 'aria-label' || a === 'aria-labelledby') score = 88;
+      else if (['name', 'placeholder', 'title', 'alt', 'value'].includes(a)) score = 78;
+      else if (a === 'href') score = 68;
+      addCandidate(out, `${tag}${attr(a, v)}`, score);
+    }
+
+    const present = attrs.filter((a) => stableAttrValue(el, a));
+    for (let i = 0; i < present.length; i++) {
+      for (let j = i + 1; j < present.length; j++) {
+        const a = present[i];
+        const b = present[j];
+        addCandidate(out, `${tag}${attr(a, stableAttrValue(el, a))}${attr(b, stableAttrValue(el, b))}`, 86);
+      }
+    }
+
+    const classes = stableClassTokens(el);
+    if (classes.length) {
+      addCandidate(out, `${tag}.${classes.map(cssIdent).join('.')}`, 55);
+      for (const c of classes) addCandidate(out, `${tag}.${cssIdent(c)}`, 45);
+    }
+
+    return out.sort((a, b) => b.score - a.score || a.css.length - b.css.length);
+  }
+
+  function anchorCssCandidates(el) {
+    return directCssCandidates(el)
+      .filter((c) => hitsExactly(c.css, el))
+      .sort((a, b) => b.score - a.score || a.css.length - b.css.length);
+  }
+
+  function childMatchesSegment(parent, child, segment) {
+    try {
+      const hits = Array.from(parent.children).filter((x) => x.matches(segment));
+      return hits.length === 1 && hits[0] === child;
+    } catch {
+      return false;
+    }
+  }
+
+  function segmentForChild(parent, child) {
+    const tag = child.tagName.toLowerCase();
+    for (const c of directCssCandidates(child)) {
+      if (childMatchesSegment(parent, child, c.css)) return c.css;
+    }
+    if (childMatchesSegment(parent, child, tag)) return tag;
+    const sameTag = Array.from(parent.children).filter((x) => x.tagName === child.tagName);
+    const index = sameTag.indexOf(child) + 1;
+    return `${tag}:nth-of-type(${index})`;
+  }
+
+  function pathFromAnchor(el, anchorEl, anchorCss) {
+    const parts = [];
+    let cur = el;
+    while (cur && cur !== anchorEl && cur !== document.documentElement) {
+      const parent = cur.parentElement;
+      if (!parent) return undefined;
+      parts.unshift(segmentForChild(parent, cur));
+      cur = parent;
+    }
+    if (cur !== anchorEl || !parts.length) return undefined;
+    return `${anchorCss} > ${parts.join(' > ')}`;
+  }
+
+  function absolutePath(el) {
+    const parts = [];
+    let cur = el;
+    while (cur && cur !== document.documentElement) {
+      const parent = cur.parentElement;
+      if (!parent) break;
+      parts.unshift(segmentForChild(parent, cur));
+      cur = parent;
+    }
+    parts.unshift('html');
+    return parts.join(' > ');
+  }
+
+  function selectorsFor(el) {
+    const out = [];
+
+    for (const c of directCssCandidates(el)) {
+      if (hitsExactly(c.css, el)) addCandidate(out, c.css, 2000 + c.score);
+    }
+
+    const ancestors = [];
+    for (let a = el.parentElement, depth = 0; a && a !== document.body && a !== document.documentElement && depth < 8; a = a.parentElement, depth++) {
+      ancestors.push({ el: a, depth });
+    }
+
+    for (const { el: anc, depth } of ancestors) {
+      const anchors = anchorCssCandidates(anc).slice(0, 4);
+      for (const anchor of anchors) {
+        const css = pathFromAnchor(el, anc, anchor.css);
+        if (css && hitsExactly(css, el)) addCandidate(out, css, 1000 + anchor.score - depth * 10);
+      }
+    }
+
+    const abs = absolutePath(el);
+    if (abs && hitsExactly(abs, el)) addCandidate(out, abs, 1);
+
+    out.sort((a, b) => b.score - a.score || a.css.length - b.css.length);
+    return out.slice(0, cfg.maxSelectorsPerNode).map((x) => x.css);
   }
 
   function textById(id) {
     const e = document.getElementById(id);
     if (!e || hasHiddenAncestor(e)) return undefined;
-    return cleanText(e.innerText || e.textContent);
+    return cleanText(e.innerText || e.textContent, cfg.labelLimit);
   }
 
   function textFromLabelledBy(el) {
     const ids = cleanText(el.getAttribute('aria-labelledby'), 500);
     if (!ids) return undefined;
-    const parts = ids.split(/\s+/).map(textById).filter(Boolean);
-    return cleanText(parts.join(' '));
+    return cleanText(ids.split(/\s+/).map(textById).filter(Boolean).join(' '), cfg.labelLimit);
+  }
+
+  function isLabelableFormControl(el) {
+    const tag = el.tagName.toLowerCase();
+    return ['input', 'textarea', 'select', 'meter', 'progress', 'output'].includes(tag);
   }
 
   function associatedLabelText(el) {
+    if (!isLabelableFormControl(el)) return undefined;
+
     const id = el.getAttribute('id');
     if (id) {
-      const label = document.querySelector(`label[for="${cssEscape(id)}"]`);
+      const label = document.querySelector(`label[for=${cssString(id)}]`);
       if (label && !hasHiddenAncestor(label)) {
-        const t = cleanText(label.innerText || label.textContent);
+        const t = cleanText(label.innerText || label.textContent, cfg.labelLimit);
         if (t) return t;
       }
     }
 
     const wrapping = el.closest('label');
     if (wrapping && !hasHiddenAncestor(wrapping)) {
-      const t = cleanText(wrapping.innerText || wrapping.textContent);
+      const t = cleanText(wrapping.innerText || wrapping.textContent, cfg.labelLimit);
       if (t) return t;
     }
 
-    // Dirty-HTML fallback: <label for="email">Email</label><input name="email">
     const name = el.getAttribute('name');
     if (name) {
-      const loose = document.querySelector(`label[for="${cssEscape(name)}"]`);
+      const loose = document.querySelector(`label[for=${cssString(name)}]`);
       if (loose && !hasHiddenAncestor(loose)) {
-        const t = cleanText(loose.innerText || loose.textContent);
+        const t = cleanText(loose.innerText || loose.textContent, cfg.labelLimit);
         if (t) return t;
       }
     }
 
-    // Nearby previous label fallback in the same form/section.
     let prev = el.previousElementSibling;
     for (let i = 0; prev && i < 3; i++, prev = prev.previousElementSibling) {
       if (prev.tagName && prev.tagName.toLowerCase() === 'label' && !hasHiddenAncestor(prev)) {
-        const t = cleanText(prev.innerText || prev.textContent);
+        const t = cleanText(prev.innerText || prev.textContent, cfg.labelLimit);
         if (t) return t;
       }
     }
@@ -139,27 +397,26 @@ export function makeSemanticUiTree(options = {}) {
   }
 
   function ownText(el, limit = cfg.labelLimit) {
-    const parts = [];
+    const pieces = [];
     for (const node of el.childNodes) {
       if (node.nodeType === Node.TEXT_NODE) {
-        parts.push(node.textContent || '');
+        pieces.push(node.textContent || '');
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const child = node;
-        const tag = child.tagName.toLowerCase();
         if (hasHiddenAncestor(child)) continue;
-        if (['svg', 'path', 'use', 'script', 'style'].includes(tag)) continue;
-        if (child.matches && child.matches(ACTION_SELECTOR)) continue;
+        const tag = child.tagName.toLowerCase();
+        if (['script', 'style', 'svg', 'path', 'use'].includes(tag)) continue;
+        if (child.matches && child.matches(ACTION_CSS)) continue;
         const txt = cleanText(child.innerText || child.textContent, 40);
-        if (txt) parts.push(txt);
+        if (txt) pieces.push(txt);
       }
     }
-    return cleanText(parts.join(' '), limit);
+    return cleanText(pieces.join(' '), limit);
   }
 
   function elementLabel(el) {
     const tag = el.tagName.toLowerCase();
     const role = el.getAttribute('role');
-
     return cleanText(
       el.getAttribute('aria-label') ||
         textFromLabelledBy(el) ||
@@ -169,7 +426,7 @@ export function makeSemanticUiTree(options = {}) {
         el.getAttribute('title') ||
         (tag === 'input' ? el.getAttribute('name') : undefined) ||
         ownText(el) ||
-        cleanText(el.innerText || el.textContent) ||
+        cleanText(el.innerText || el.textContent, cfg.labelLimit) ||
         el.getAttribute('data-testid') ||
         el.getAttribute('data-cy') ||
         el.id ||
@@ -179,7 +436,7 @@ export function makeSemanticUiTree(options = {}) {
     );
   }
 
-  function inferKind(el) {
+  function inferActionKind(el) {
     const tag = el.tagName.toLowerCase();
     const role = (el.getAttribute('role') || '').toLowerCase();
     const type = (el.getAttribute('type') || '').toLowerCase();
@@ -227,6 +484,49 @@ export function makeSemanticUiTree(options = {}) {
     return s.length ? s : undefined;
   }
 
+  function inputValue(el) {
+    if (!('value' in el)) return undefined;
+    const value = fullCleanText(el.value, cfg.contentTextLimit);
+    if (!value) return undefined;
+    const type = (el.getAttribute('type') || '').toLowerCase();
+    if (['checkbox', 'radio'].includes(type) && value === 'on') return undefined;
+    return value;
+  }
+
+  function selectedText(select) {
+    const selected = Array.from(select.selectedOptions || []);
+    const text = selected.map((o) => o.innerText || o.textContent || o.value).filter(Boolean).join(', ');
+    return fullCleanText(text || select.value, cfg.contentTextLimit);
+  }
+
+  function contentText(el, limit = cfg.contentTextLimit) {
+    if (!isElement(el)) return undefined;
+    const tag = el.tagName.toLowerCase();
+
+    if (tag === 'input') return fullCleanText(el.value || el.getAttribute('value'), limit);
+    if (tag === 'textarea') return fullCleanText(el.value || el.innerText || el.textContent, limit);
+    if (tag === 'select') return fullCleanText(selectedText(el), limit);
+    if (tag === 'option') return fullCleanText(el.innerText || el.textContent || el.value, limit);
+    if (el.isContentEditable) return fullCleanText(el.innerText || el.textContent, limit);
+
+    if (['section', 'article', 'main', 'aside', 'header', 'footer', 'nav'].includes(tag)) {
+      return fullCleanText(ownText(el, limit), limit);
+    }
+
+    return fullCleanText(el.innerText || el.textContent, limit);
+  }
+
+  function addTextFields(out, text) {
+    const t = fullCleanText(text, cfg.contentTextLimit);
+    if (!t) return;
+    if (t.length <= cfg.textPreviewLimit) {
+      out.textContent = t;
+    } else {
+      out.textContentPreview = t.slice(0, cfg.textPreviewLimit);
+      out.textContentLength = t.length;
+    }
+  }
+
   function regionRole(el) {
     if (!el) return undefined;
     const role = el.getAttribute('role');
@@ -245,7 +545,7 @@ export function makeSemanticUiTree(options = {}) {
     if (!root) return undefined;
     const h = root.querySelector('h1,h2,h3,h4,h5,h6,[role="heading"]');
     if (!h || hasHiddenAncestor(h)) return undefined;
-    return cleanText(h.innerText || h.textContent);
+    return cleanText(h.innerText || h.textContent, cfg.labelLimit);
   }
 
   function regionLabel(el) {
@@ -260,530 +560,37 @@ export function makeSemanticUiTree(options = {}) {
     );
   }
 
+  function contentLabel(el) {
+    // Content nodes must not reuse elementLabel().
+    // elementLabel() is intentionally aggressive for actions, but for content
+    // it can turn large subtree text into a misleading/huge label.
+    // Only emit a label when the DOM provides a real explicit label.
+    if (!el) return undefined;
+
+    const aria = cleanText(el.getAttribute('aria-label'), cfg.labelLimit);
+    if (aria) return aria;
+
+    const labelledBy = textFromLabelledBy(el);
+    if (labelledBy) return labelledBy;
+
+    const title = cleanText(el.getAttribute('title'), cfg.labelLimit);
+    if (title) return title;
+
+    const alt = cleanText(el.getAttribute('alt'), cfg.labelLimit);
+    if (alt) return alt;
+
+    return undefined;
+  }
+
   function findRegion(el) {
-    const dialog = el.closest('[role="dialog"],[role="alertdialog"]');
+    const dialog = el.closest('[role="dialog"],[role="alertdialog"],dialog[open]');
     if (dialog && isVisible(dialog)) return dialog;
 
     let cur = el.parentElement;
     while (cur && cur !== document.body && cur !== document.documentElement) {
-      if (cur.matches(REGION_SELECTOR) && isVisible(cur)) return cur;
+      if (cur.matches(REGION_CSS) && isVisible(cur)) return cur;
       cur = cur.parentElement;
     }
-    return undefined;
-  }
-
-  function groupType(el) {
-    if (!el) return undefined;
-    const tag = el.tagName.toLowerCase();
-    const role = el.getAttribute('role');
-    if (tag === 'tr' || role === 'row') return 'row';
-    if (tag === 'form' || role === 'form') return 'form';
-    if (tag === 'li' || role === 'listitem') return 'listitem';
-    if (tag === 'article') return 'card';
-    if (tag === 'section') return 'section';
-    if (role === 'dialog' || role === 'alertdialog') return 'dialog';
-    if (role === 'group' || role === 'region') return 'section';
-    return 'section';
-  }
-
-  function groupScore(ancestor, action) {
-    const tag = ancestor.tagName.toLowerCase();
-    const role = (ancestor.getAttribute('role') || '').toLowerCase();
-    let s = 0;
-    if (['tr', 'li', 'form', 'article', 'section', 'fieldset'].includes(tag)) s += 35;
-    if (['row', 'listitem', 'form', 'group', 'region', 'dialog', 'alertdialog'].includes(role)) s += 35;
-    if (ancestor.hasAttribute('aria-label') || ancestor.hasAttribute('aria-labelledby')) s += 20;
-    if (firstHeadingText(ancestor)) s += 15;
-    if (tag === 'body' || tag === 'html' || tag === 'main') s -= 50;
-
-    const rect = ancestor.getBoundingClientRect();
-    const viewportArea = Math.max(1, window.innerWidth * window.innerHeight);
-    const area = rect.width * rect.height;
-    if (area > viewportArea * 0.75) s -= 35;
-
-    let d = 0;
-    for (let n = action.parentElement; n && n !== ancestor; n = n.parentElement) d++;
-    s -= d * 4;
-    return s;
-  }
-
-  function findGroup(el) {
-    let best = undefined;
-    let bestScore = -Infinity;
-    let cur = el.parentElement;
-    let depth = 0;
-    while (cur && cur !== document.body && cur !== document.documentElement && depth < 8) {
-      if (isVisible(cur)) {
-        const sc = groupScore(cur, el);
-        if (sc > bestScore) {
-          best = cur;
-          bestScore = sc;
-        }
-      }
-      cur = cur.parentElement;
-      depth++;
-    }
-    return bestScore >= 25 ? best : undefined;
-  }
-
-  function directDescriptiveText(root, excludeEl) {
-    const parts = [];
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode(node) {
-        const parent = node.parentElement;
-        if (!parent) return NodeFilter.FILTER_REJECT;
-        if (excludeEl && (parent === excludeEl || excludeEl.contains(parent))) return NodeFilter.FILTER_REJECT;
-        if (parent.closest(ACTION_SELECTOR)) return NodeFilter.FILTER_REJECT;
-        if (hasHiddenAncestor(parent)) return NodeFilter.FILTER_REJECT;
-        const tag = parent.tagName.toLowerCase();
-        if (['script', 'style', 'svg', 'path', 'use'].includes(tag)) return NodeFilter.FILTER_REJECT;
-        const text = cleanText(node.textContent, 60);
-        return text ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-      },
-    });
-
-    while (parts.join(' ').length < cfg.contextLimit) {
-      const n = walker.nextNode();
-      if (!n) break;
-      const t = cleanText(n.textContent, 60);
-      if (t && !parts.includes(t)) parts.push(t);
-    }
-    return cleanText(parts.join(' '), cfg.contextLimit);
-  }
-
-  function formFields(form) {
-    const controls = Array.from(form.querySelectorAll('input,textarea,select,[role="textbox"],[contenteditable="true"]'));
-    const labels = [];
-    for (const c of controls) {
-      if (!isVisible(c)) continue;
-      const kind = inferKind(c);
-      if (!['input', 'textbox', 'select', 'checkbox', 'radio'].includes(kind)) continue;
-      const l = elementLabel(c);
-      if (l && !labels.includes(l)) labels.push(l);
-      if (labels.length >= 8) break;
-    }
-    return labels;
-  }
-
-  function rowContext(row, action) {
-    const cells = Array.from(row.children).filter((c) => ['td', 'th'].includes(c.tagName.toLowerCase()));
-    const pieces = [];
-    for (const cell of cells) {
-      if (action && cell.contains(action)) continue;
-      const t = directDescriptiveText(cell, action) || cleanText(cell.innerText || cell.textContent, 80);
-      if (t && !pieces.includes(t)) pieces.push(t);
-      if (pieces.join(' | ').length >= cfg.contextLimit) break;
-    }
-    return cleanText(pieces.join(' | '), cfg.contextLimit);
-  }
-
-  function summarizeGroup(group, action) {
-    if (!group) return undefined;
-    const type = groupType(group);
-    const label = cleanText(
-      group.getAttribute('aria-label') ||
-        textFromLabelledBy(group) ||
-        firstHeadingText(group) ||
-        (group.tagName.toLowerCase() === 'form' ? group.getAttribute('id') : undefined),
-      cfg.labelLimit
-    );
-
-    let text;
-    if (type === 'form') {
-      const fields = formFields(group);
-      text = fields.length ? cleanText('Fields: ' + fields.join(', '), cfg.contextLimit) : undefined;
-    } else if (type === 'row') {
-      text = rowContext(group, action);
-    } else if (type === 'dialog') {
-      text = directDescriptiveText(group, action);
-    } else {
-      text = directDescriptiveText(group, action);
-    }
-
-    if (text && label && text === label) text = undefined;
-
-    const out = { type };
-    if (label) out.label = label;
-    if (text) out.text = text;
-    return out.label || out.text ? out : undefined;
-  }
-
-  // ---------------------------------------------------------------------------
-  // Selector generation policy:
-  // - Computed ONLY from the original DOM element/ancestors.
-  // - Does NOT depend on semantic UI tree, region ids, action ids, or emitted order.
-  // - Every emitted action gets a selector.
-  // - Preferred selectors use stable DOM anchors and stable attributes.
-  // - nth-of-type is the final fallback only, and when a path is needed, every
-  //   ancestor segment first tries stable attributes before nth-of-type.
-  // - Final selector is always proven exact at extraction time:
-  //     querySelectorAll(selector).length === 1 && querySelector(selector) === el
-  // ---------------------------------------------------------------------------
-
-  function cssString(value) {
-    // Attribute values are CSS strings, not CSS identifiers.
-    return JSON.stringify(String(value));
-  }
-
-  function cssIdent(value) {
-    if (window.CSS && typeof window.CSS.escape === 'function') return window.CSS.escape(String(value));
-    return String(value).replace(/[^a-zA-Z0-9_-]/g, '\\$&');
-  }
-
-  function attr(name, value) {
-    return `[${name}=${cssString(value)}]`;
-  }
-
-  function selectorNodes(sel) {
-    try {
-      return Array.from(document.querySelectorAll(sel));
-    } catch {
-      return [];
-    }
-  }
-
-  function selectorHitsExactly(sel, el) {
-    const nodes = selectorNodes(sel);
-    return nodes.length === 1 && nodes[0] === el;
-  }
-
-  function addCandidate(list, sel, score) {
-    if (!sel || list.some((x) => x.sel === sel)) return;
-    list.push({ sel, score });
-  }
-
-  function isStableId(id) {
-    if (!id) return false;
-    if (id.length > 80) return false;
-    if (/^(:r|radix-|headlessui-|react-aria-|ember\d+|mui-|chakra-|mantine-|rc_|rc-)/i.test(id)) return false;
-    if (/^[a-f0-9]{8,}$/i.test(id)) return false;
-    if (/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id)) return false;
-    if (/\d{8,}/.test(id)) return false;
-    return true;
-  }
-
-  function usefulAttrValue(el, name) {
-    const v = el.getAttribute(name);
-    if (v == null) return undefined;
-    const t = String(v).replace(/\s+/g, ' ').trim();
-    if (!t) return undefined;
-    if (t.length > 180) return undefined;
-    return t;
-  }
-
-  function stableClassTokens(el) {
-    const cls = typeof el.className === 'string' ? el.className : '';
-    if (!cls) return [];
-    return cls
-      .split(/\s+/)
-      .filter(Boolean)
-      .filter((c) => c.length <= 40)
-      .filter((c) => !/^[a-z0-9_-]*[0-9a-f]{6,}[a-z0-9_-]*$/i.test(c))
-      .filter((c) => !/^(active|selected|disabled|open|closed|focus|focused|hover|ng-|css-|sc-|jss|makeStyles|emotion-|__)/i.test(c))
-      .slice(0, 3);
-  }
-
-  function directSelectorCandidates(el) {
-    const tag = el.tagName.toLowerCase();
-    const out = [];
-
-    for (const a of ['data-testid', 'data-test-id', 'data-cy', 'data-test', 'data-qa', 'data-automation-id']) {
-      const v = usefulAttrValue(el, a);
-      if (!v) continue;
-      addCandidate(out, `${tag}${attr(a, v)}`, 100);
-      addCandidate(out, attr(a, v), 98);
-    }
-
-    const id = usefulAttrValue(el, 'id');
-    if (isStableId(id)) {
-      addCandidate(out, `${tag}#${cssIdent(id)}`, 96);
-      addCandidate(out, `#${cssIdent(id)}`, 94);
-    }
-
-    const singleAttrs = [
-      'aria-label',
-      'aria-labelledby',
-      'name',
-      'placeholder',
-      'title',
-      'alt',
-      'role',
-      'type',
-      'value',
-      'autocomplete',
-      'href',
-      'for',
-    ];
-
-    for (const a of singleAttrs) {
-      const v = usefulAttrValue(el, a);
-      if (!v) continue;
-      let sc = 70;
-      if (a === 'aria-label' || a === 'aria-labelledby') sc = 88;
-      else if (['name', 'placeholder', 'title', 'alt', 'value'].includes(a)) sc = 78;
-      else if (a === 'href') sc = 68;
-      addCandidate(out, `${tag}${attr(a, v)}`, sc);
-    }
-
-    const comboAttrs = [
-      'role',
-      'aria-label',
-      'aria-labelledby',
-      'name',
-      'placeholder',
-      'title',
-      'alt',
-      'type',
-      'value',
-      'autocomplete',
-      'href',
-    ].filter((a) => usefulAttrValue(el, a));
-
-    for (let i = 0; i < comboAttrs.length; i++) {
-      for (let j = i + 1; j < comboAttrs.length; j++) {
-        const a = comboAttrs[i];
-        const b = comboAttrs[j];
-        addCandidate(out, `${tag}${attr(a, usefulAttrValue(el, a))}${attr(b, usefulAttrValue(el, b))}`, 86);
-      }
-    }
-
-    if (comboAttrs.length >= 3) {
-      const sel = `${tag}${comboAttrs.slice(0, 5).map((a) => attr(a, usefulAttrValue(el, a))).join('')}`;
-      addCandidate(out, sel, 90);
-    }
-
-    const classes = stableClassTokens(el);
-    if (classes.length) {
-      addCandidate(out, `${tag}.${classes.map(cssIdent).join('.')}`, 55);
-      for (const c of classes) addCandidate(out, `${tag}.${cssIdent(c)}`, 45);
-    }
-
-    return out;
-  }
-
-  function anchorSelectorCandidates(el) {
-    const tag = el.tagName.toLowerCase();
-    const out = [];
-
-    for (const c of directSelectorCandidates(el)) {
-      if (selectorHitsExactly(c.sel, el)) addCandidate(out, c.sel, c.score);
-    }
-
-    const role = usefulAttrValue(el, 'role');
-    const aria = usefulAttrValue(el, 'aria-label');
-    const name = usefulAttrValue(el, 'name');
-
-    if (role) addCandidate(out, `${tag}${attr('role', role)}`, 70);
-    if (aria) addCandidate(out, `${tag}${attr('aria-label', aria)}`, 76);
-    if (role && aria) addCandidate(out, `${tag}${attr('role', role)}${attr('aria-label', aria)}`, 86);
-    if (tag === 'form') {
-      if (name) addCandidate(out, `form${attr('name', name)}`, 76);
-      if (role) addCandidate(out, `form${attr('role', role)}`, 82);
-      if (role && aria) addCandidate(out, `form${attr('role', role)}${attr('aria-label', aria)}`, 90);
-    }
-
-    return out.filter((c) => selectorHitsExactly(c.sel, el)).sort((a, b) => b.score - a.score);
-  }
-
-  function localSegmentCandidates(el) {
-    const tag = el.tagName.toLowerCase();
-    const out = [];
-
-    // Similar to direct candidates, but these only need to be unique among siblings.
-    // This lets parent paths stay stable without nth whenever possible.
-    for (const c of directSelectorCandidates(el)) {
-      const seg = c.sel.startsWith(tag) || c.sel.startsWith('#') || c.sel.startsWith('[') ? c.sel : `${tag}${c.sel}`;
-      addCandidate(out, seg, c.score);
-    }
-
-    addCandidate(out, tag, 1);
-    return out.sort((a, b) => b.score - a.score || a.sel.length - b.sel.length);
-  }
-
-  function childMatchesSegment(parent, child, seg) {
-    try {
-      const hits = Array.from(parent.children).filter((x) => x.matches(seg));
-      return hits.length === 1 && hits[0] === child;
-    } catch {
-      return false;
-    }
-  }
-
-  function segmentForChild(parent, child) {
-    for (const c of localSegmentCandidates(child)) {
-      if (childMatchesSegment(parent, child, c.sel)) return c.sel;
-    }
-
-    const tag = child.tagName.toLowerCase();
-    const same = Array.from(parent.children).filter((x) => x.tagName === child.tagName);
-    const idx = same.indexOf(child) + 1;
-    return same.length === 1 ? tag : `${tag}:nth-of-type(${idx})`;
-  }
-
-  function smartPathFromAnchor(el, anchorEl, anchorSel) {
-    const parts = [];
-    let cur = el;
-    while (cur && cur !== anchorEl && cur !== document.documentElement) {
-      const parent = cur.parentElement;
-      if (!parent) return undefined;
-      parts.unshift(segmentForChild(parent, cur));
-      cur = parent;
-    }
-    if (cur !== anchorEl || !parts.length) return undefined;
-    return `${anchorSel} > ${parts.join(' > ')}`;
-  }
-
-  function absoluteSmartPath(el) {
-    const parts = [];
-    let cur = el;
-    while (cur && cur !== document.documentElement) {
-      const parent = cur.parentElement;
-      if (!parent) break;
-      parts.unshift(segmentForChild(parent, cur));
-      cur = parent;
-    }
-    parts.unshift('html');
-    return parts.join(' > ');
-  }
-
-  function selectorBundleFor(el) {
-    const candidates = [];
-
-    // 1) Direct exact selectors from the element itself.
-    for (const c of directSelectorCandidates(el)) {
-      if (selectorHitsExactly(c.sel, el)) addCandidate(candidates, c.sel, c.score + 2000);
-    }
-
-    // 2) Stable ancestor + target stable selector, no nth.
-    const ancestors = [];
-    for (let a = el.parentElement, depth = 0; a && a !== document.body && a !== document.documentElement && depth < 10; a = a.parentElement, depth++) {
-      ancestors.push({ el: a, depth });
-    }
-
-    const rels = directSelectorCandidates(el).slice(0, 24);
-    for (const { el: anc, depth } of ancestors) {
-      const anchors = anchorSelectorCandidates(anc).slice(0, 6);
-      for (const an of anchors) {
-        for (const r of rels) {
-          const sel = `${an.sel} ${r.sel}`;
-          if (selectorHitsExactly(sel, el)) addCandidate(candidates, sel, 1500 + an.score + r.score - depth * 5);
-        }
-      }
-    }
-
-    // 3) Stable ancestor + smart child path. Each parent segment tries stable
-    // attrs/classes first, and uses nth only for the specific ambiguous level.
-    for (const { el: anc, depth } of ancestors) {
-      const anchors = anchorSelectorCandidates(anc).slice(0, 6);
-      for (const an of anchors) {
-        const sel = smartPathFromAnchor(el, anc, an.sel);
-        if (sel && selectorHitsExactly(sel, el)) addCandidate(candidates, sel, 900 + an.score - depth * 12);
-      }
-    }
-
-    // 4) Full DOM smart path. This is the guaranteed fallback. It still tries
-    // stable selectors at every parent level before nth-of-type.
-    const abs = absoluteSmartPath(el);
-    if (abs && selectorHitsExactly(abs, el)) addCandidate(candidates, abs, 1);
-
-    candidates.sort((a, b) => b.score - a.score || a.sel.length - b.sel.length);
-    const primary = candidates[0]?.sel || abs;
-
-    const cssFallbacks = [];
-    for (const c of candidates) {
-      if (c.sel === primary) continue;
-      cssFallbacks.push(c.sel);
-      if (cssFallbacks.length >= 2) break;
-    }
-
-    return { primary, cssFallbacks };
-  }
-
-  function selectorFor(el) {
-    return selectorBundleFor(el).primary;
-  }
-
-  function roleForFallback(el, kind) {
-    const role = getRoleForFallback(el, kind);
-    const name = elementLabel(el);
-    if (!role || !name) return undefined;
-    return ['role', role, name];
-  }
-
-  function getRoleForFallback(el, kind) {
-    const explicit = cleanText(el.getAttribute('role'), 40);
-    if (explicit) return explicit;
-    if (kind === 'button') return 'button';
-    if (kind === 'link') return 'link';
-    if (kind === 'textbox' || kind === 'input') return 'textbox';
-    if (kind === 'checkbox') return 'checkbox';
-    if (kind === 'radio') return 'radio';
-    if (kind === 'select') return 'combobox';
-    if (kind === 'tab') return 'tab';
-    if (kind === 'option') return 'option';
-    if (kind === 'menuitem') return 'menuitem';
-    return undefined;
-  }
-
-  function formSubmitFallback(el) {
-    const tag = el.tagName.toLowerCase();
-    const type = (el.getAttribute('type') || '').toLowerCase();
-    const isSubmitLike =
-      (tag === 'button' && (!type || type === 'submit')) ||
-      (tag === 'input' && ['submit', 'image'].includes(type));
-    if (!isSubmitLike) return undefined;
-    const form = el.closest('form');
-    if (!form) return undefined;
-    const fs = selectorFor(form);
-    return fs ? ['submit', fs] : undefined;
-  }
-
-  function fallbackFor(el, kind, primarySelector, sub) {
-    const fb = [];
-    if (sub) fb.push(['key', sub]);
-
-    const submit = formSubmitFallback(el);
-    if (submit) fb.push(submit);
-    if (fb.length >= 3) return fb;
-
-    const bundle = selectorBundleFor(el);
-    for (const s of bundle.cssFallbacks) {
-      if (s && s !== primarySelector) fb.push(['css', s]);
-      if (fb.length >= 3) return fb;
-    }
-
-    const role = roleForFallback(el, kind);
-    if (role) fb.push(role);
-    if (fb.length >= 3) return fb;
-
-    if (primarySelector && !isTextEditable(el)) fb.push(['domclick']);
-    return fb.slice(0, 3);
-  }
-
-  function isProbablyOccluded(el) {
-    const rect = el.getBoundingClientRect();
-    if (rect.width <= 0 || rect.height <= 0) return true;
-    const pts = [
-      [rect.left + rect.width / 2, rect.top + rect.height / 2],
-      [rect.left + Math.min(rect.width - 1, 6), rect.top + Math.min(rect.height - 1, 6)],
-      [rect.right - Math.min(rect.width - 1, 6), rect.bottom - Math.min(rect.height - 1, 6)],
-    ];
-    let visibleHit = false;
-    for (const [x, y] of pts) {
-      if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) continue;
-      const top = document.elementFromPoint(x, y);
-      if (top && (top === el || el.contains(top))) visibleHit = true;
-    }
-    return !visibleHit;
-  }
-
-  function submitHintFor(el, kind) {
-    if (!isTextEditable(el)) return undefined;
-    const form = el.closest('form');
-    const role = form?.getAttribute('role') || '';
-    const label = `${elementLabel(el) || ''} ${role} ${form?.getAttribute('aria-label') || ''}`.toLowerCase();
-    if (/search|tìm kiếm|tim kiem/.test(label)) return 'Enter';
-    if (document.activeElement === el && 'value' in el && el.value && form) return 'Enter';
     return undefined;
   }
 
@@ -798,115 +605,203 @@ export function makeSemanticUiTree(options = {}) {
 
     const id = `r${regions.length + 1}`;
     regionMap.set(region, id);
-    regions.push({
-      id,
-      role: regionRole(region),
-      label: regionLabel(region),
-    });
+    regions.push({ id, role: regionRole(region), label: regionLabel(region) });
     return id;
   }
 
-  function usefulValue(el, kind) {
-    if (!('value' in el)) return undefined;
-    const value = cleanText(el.value, 120);
-    if (!value) return undefined;
-    if ((kind === 'checkbox' || kind === 'radio') && value === 'on') return undefined;
-    if (kind === 'button') return undefined;
-    return value;
+  function isProbablyOccluded(el) {
+    const rect = el.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return true;
+    const points = [
+      [rect.left + rect.width / 2, rect.top + rect.height / 2],
+      [rect.left + Math.min(rect.width - 1, 6), rect.top + Math.min(rect.height - 1, 6)],
+      [rect.right - Math.min(rect.width - 1, 6), rect.bottom - Math.min(rect.height - 1, 6)],
+    ];
+    for (const [x, y] of points) {
+      if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) continue;
+      const top = document.elementFromPoint(x, y);
+      if (top && (top === el || el.contains(top))) return false;
+    }
+    return true;
   }
 
-  const activeDialog = Array.from(document.querySelectorAll('[role="dialog"],[role="alertdialog"]')).find(isVisible);
+  function submitHintFor(el) {
+    if (!isTextEditable(el)) return undefined;
+    const form = el.closest('form');
+    const label = `${elementLabel(el) || ''} ${form?.getAttribute('role') || ''} ${form?.getAttribute('aria-label') || ''}`.toLowerCase();
+    if (/search|tìm kiếm|tim kiem/.test(label)) return 'Enter';
+    if (document.activeElement === el && inputValue(el) && form) return 'Enter';
+    return undefined;
+  }
 
   function actionScore(item, el) {
     let s = 0;
-    if (activeDialog) s += activeDialog.contains(el) ? 300 : -100;
+    const activeDialog = document.querySelector('[role="dialog"],[role="alertdialog"],dialog[open]');
+    if (activeDialog) s += activeDialog.contains(el) ? 300 : -80;
     if (document.activeElement === el) s += 150;
     if (item.state && item.state.includes('editable')) s += 80;
     if (item.label) s += 35;
     if (item.region) s += 15;
-    if (item.group && (item.group.label || item.group.text)) s += 15;
     if (item.state && item.state.includes('disabled')) s -= 80;
     if (item.state && item.state.includes('occluded')) s -= 120;
-
-    const txt = `${item.label || ''} ${item.group?.label || ''}`.toLowerCase();
-    if (/terms|privacy|cookie|learn more/.test(txt)) s -= 40;
     return s;
   }
 
-  const raw = Array.from(document.querySelectorAll(ACTION_SELECTOR)).filter((el) => {
+  function contentKind(el) {
+    const tag = el.tagName.toLowerCase();
+    const role = (el.getAttribute('role') || '').toLowerCase();
+    if (/^h[1-6]$/.test(tag) || role === 'heading') return 'heading';
+    if (tag === 'p' || role === 'paragraph') return 'paragraph';
+    if (tag === 'label') return 'label';
+    if (tag === 'li' || role === 'listitem') return 'listitem';
+    if (['td', 'th'].includes(tag) || ['cell', 'rowheader', 'columnheader'].includes(role)) return 'cell';
+    if (tag === 'input') return 'input';
+    if (tag === 'textarea' || role === 'textbox' || el.isContentEditable) return 'textbox';
+    if (tag === 'select') return 'select';
+    if (tag === 'option') return 'option';
+    if (tag === 'blockquote') return 'quote';
+    if (tag === 'pre' || tag === 'code') return 'code';
+    if (['section', 'article', 'main', 'aside', 'header', 'footer', 'nav'].includes(tag)) return regionRole(el) || tag;
+    if (role) return role;
+    return tag;
+  }
+
+  function contentScore(item, el) {
+    const tag = el.tagName.toLowerCase();
+    let s = 0;
+    if (/^h[1-6]$/.test(tag) || item.kind === 'heading') s += 100;
+    if (['p', 'li', 'td', 'th', 'label'].includes(tag)) s += 70;
+    if (['input', 'textarea', 'select'].includes(tag) || el.isContentEditable) s += 60;
+    if (item.region) s += 10;
+    if (item.textContent) s += 10;
+    if (item.textContentPreview) s += 5;
+    if (['section', 'article', 'main', 'aside', 'header', 'footer', 'nav'].includes(tag)) s -= 20;
+    return s;
+  }
+
+  const rawActions = Array.from(document.querySelectorAll(ACTION_CSS)).filter((el) => {
     if (!isVisible(el)) return false;
     const tag = el.tagName.toLowerCase();
     if (['svg', 'path', 'use'].includes(tag)) return false;
-    const parentAction = el.parentElement && el.parentElement.closest(ACTION_SELECTOR);
-    if (parentAction && parentAction !== el && parentAction.contains(el)) return false;
-    return true;
+    const parentAction = el.parentElement && el.parentElement.closest(ACTION_CSS);
+    return !(parentAction && parentAction !== el && parentAction.contains(el));
   });
 
   const actions = [];
-  const seen = new Set();
+  const seenActions = new Set();
 
-  for (const el of raw) {
-    const kind = inferKind(el);
-    const label = elementLabel(el);
-    const selector = selectorFor(el);
+  for (const el of rawActions) {
+    const selectors = selectorsFor(el);
+    if (!selectors.length) continue;
 
-    // Every emitted action gets a selector. selectorFor() has a guaranteed
-    // full-DOM smart-path fallback, so absence here would mean a non-standard
-    // DOM edge case that querySelectorAll cannot represent.
-    if (!selector) continue;
-    const occluded = !isTextEditable(el) && isProbablyOccluded(el);
-
-    const region = regionIdFor(el);
-    const group = summarizeGroup(findGroup(el), el);
-    let state = elementState(el, kind);
-    if (occluded) state = [...(state || []), 'occluded'];
-    const value = usefulValue(el, kind);
-    const sub = submitHintFor(el, kind);
-    const fb = fallbackFor(el, kind, selector, sub);
-
-    const key = `${kind}|${selector || ''}|${label || ''}|${region || ''}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-
+    const kind = inferActionKind(el);
     const item = { id: '', kind };
+    const label = elementLabel(el);
+    const value = inputValue(el);
+    const state = elementState(el, kind);
+    const region = regionIdFor(el);
+    const sub = submitHintFor(el);
+
     if (label) item.label = label;
     if (value) item.value = value;
-    item.selector = selector;
+    item.selectors = selectors;
     if (sub) item.sub = sub;
-    if (fb.length) item.fb = fb;
     if (region) item.region = region;
-    if (group) item.group = group;
-    if (state) item.state = state;
+
+    let finalState = state;
+    if (!isTextEditable(el) && isProbablyOccluded(el)) finalState = [...(finalState || []), 'occluded'];
+    if (finalState) item.state = finalState;
+
+    const key = `${kind}|${selectors[0]}|${label || ''}|${region || ''}`;
+    if (seenActions.has(key)) continue;
+    seenActions.add(key);
 
     item._score = actionScore(item, el);
     actions.push(item);
   }
 
   actions.sort((a, b) => b._score - a._score);
-
-  const limited = actions.slice(0, cfg.maxActions).map((a, i) => {
+  const limitedActions = actions.slice(0, cfg.maxActions).map((a, i) => {
     const out = { ...a, id: `a${i + 1}` };
     delete out._score;
     return out;
   });
 
-  // Keep only used regions.
-  const usedRegionIds = new Set(limited.map((a) => a.region).filter(Boolean));
-  const usedRegions = regions.filter((r) => usedRegionIds.has(r.id));
+  const actionElements = new Set(rawActions);
+  const rawContent = Array.from(document.querySelectorAll(CONTENT_CSS)).filter((el) => {
+    if (!isVisible(el)) return false;
+    const tag = el.tagName.toLowerCase();
+    if (['script', 'style', 'svg', 'path', 'use'].includes(tag)) return false;
+    const text = contentText(el);
+    if (!text) return false;
+    return true;
+  });
 
-  const focus = limited.find((a) => Array.isArray(a.state) && a.state.includes('focused'));
+  const content = [];
+  const seenContent = new Set();
 
-  let result = {
+  for (const el of rawContent) {
+    const text = contentText(el);
+    if (!text) continue;
+
+    const selectors = selectorsFor(el);
+    if (!selectors.length) continue;
+
+    const item = { id: '', kind: contentKind(el), selectors };
+    const label = contentLabel(el);
+    if (label) item.label = label;
+    addTextFields(item, text);
+
+    if (cfg.includeRegionForContent) {
+      const region = regionIdFor(el);
+      if (region) item.region = region;
+    }
+
+    if (actionElements.has(el)) item.actionLinked = true;
+
+    const key = `${selectors[0]}|${item.textContent || item.textContentPreview || ''}`;
+    if (seenContent.has(key)) continue;
+    seenContent.add(key);
+
+    item._score = contentScore(item, el);
+    content.push(item);
+  }
+
+  content.sort((a, b) => b._score - a._score);
+  const limitedContent = content.slice(0, cfg.maxContentNodes).map((c, i) => {
+    const out = { ...c, id: `c${i + 1}` };
+    delete out._score;
+    return out;
+  });
+
+  function syncRegions(result) {
+    const used = new Set();
+    for (const a of result.actions || []) if (a.region) used.add(a.region);
+    for (const c of result.content || []) if (c.region) used.add(c.region);
+    result.regions = result.regions.filter((r) => used.has(r.id));
+    result.stats.emittedRegions = result.regions.length;
+  }
+
+  function byteLen(obj) {
+    return new Blob([JSON.stringify(obj)]).size;
+  }
+
+  const focus = limitedActions.find((a) => Array.isArray(a.state) && a.state.includes('focused'));
+
+  const result = {
     page: {
       title: document.title || undefined,
       url: location.href,
     },
-    regions: usedRegions,
-    actions: limited,
+    regions,
+    actions: limitedActions,
+    content: limitedContent,
     stats: {
-      rawCandidates: raw.length,
-      emittedActions: limited.length,
-      emittedRegions: usedRegions.length,
+      rawCandidates: rawActions.length,
+      emittedActions: limitedActions.length,
+      rawContentCandidates: rawContent.length,
+      emittedContentNodes: limitedContent.length,
+      emittedRegions: regions.length,
     },
   };
 
@@ -914,48 +809,28 @@ export function makeSemanticUiTree(options = {}) {
     result.focus = {
       actionId: focus.id,
       label: focus.label,
-      selector: focus.selector,
+      selectors: focus.selectors,
     };
   }
 
-  // Byte budget fallback: remove non-essential verbose context first.
-  function byteLen(obj) {
-    return new Blob([JSON.stringify(obj)]).size;
-  }
+  syncRegions(result);
+  result.stats.bytesBeforeTrim = byteLen(result);
 
-  if (byteLen(result) > cfg.maxBytes) {
-    result = JSON.parse(JSON.stringify(result));
-    for (const a of result.actions) {
-      if (a.group && a.group.text) delete a.group.text;
+  if (cfg.strictMaxBytes) {
+    while (byteLen(result) > cfg.maxBytes && result.content.length > 0) {
+      result.content.pop();
+      result.stats.emittedContentNodes = result.content.length;
+      syncRegions(result);
     }
-  }
-
-  if (byteLen(result) > cfg.maxBytes) {
-    for (const a of result.actions) {
-      if (a.group && !a.group.label) delete a.group;
+    while (byteLen(result) > cfg.maxBytes && result.actions.length > 8) {
+      result.actions.pop();
+      result.stats.emittedActions = result.actions.length;
+      syncRegions(result);
     }
+    if (byteLen(result) > cfg.maxBytes) delete result.page.title;
   }
 
-  if (byteLen(result) > cfg.maxBytes) {
-    for (const a of result.actions) {
-      if (a.group) delete a.group;
-    }
-  }
-
-  // Hard byte budget: trim low-score tail until the serialized tree fits.
-  // Selectors are never shortened or weakened to fit the budget.
-  while (byteLen(result) > cfg.maxBytes && result.actions.length > 8) {
-    result.actions.pop();
-    result.stats.emittedActions = result.actions.length;
-    const used = new Set(result.actions.map((a) => a.region).filter(Boolean));
-    result.regions = result.regions.filter((r) => used.has(r.id));
-    result.stats.emittedRegions = result.regions.length;
-  }
-
-  if (byteLen(result) > cfg.maxBytes) {
-    delete result.page.title;
-  }
-
+  result.stats.bytes = byteLen(result);
   return result;
 }
 

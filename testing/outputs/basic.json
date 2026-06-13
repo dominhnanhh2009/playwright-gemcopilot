@@ -1,47 +1,86 @@
 {
   "page": {
-    "url": "file:///C:/Users/thuanvl/Desktop/codes/playwright-gemcopilot/testing/cases/basic.html"
+    "url": "about:blank"
   },
   "regions": [
     {
       "id": "r1",
       "role": "form",
-      "name": "Login"
+      "label": "Login"
     }
   ],
   "actions": [
     {
-      "role": "textbox",
-      "name": "Email",
-      "selector": "input[name=\"email\"]",
+      "id": "a1",
+      "kind": "input",
+      "label": "Email",
+      "selectors": [
+        "input[name=\"email\"][type=\"email\"]",
+        "input[name=\"email\"][placeholder=\"Email\"]",
+        "input[placeholder=\"Email\"][type=\"email\"]"
+      ],
       "region": "r1",
       "state": [
         "editable"
-      ],
-      "id": "a1"
+      ]
     },
     {
-      "role": "textbox",
-      "name": "Password",
-      "selector": "input[name=\"password\"]",
+      "id": "a2",
+      "kind": "input",
+      "label": "Password",
+      "selectors": [
+        "input[name=\"password\"][type=\"password\"]",
+        "input[name=\"password\"]",
+        "input[type=\"password\"]"
+      ],
       "region": "r1",
       "state": [
         "editable"
-      ],
-      "id": "a2"
+      ]
     },
     {
-      "role": "button",
-      "name": "Login",
-      "selector": "form#login button[type=\"submit\"]",
-      "region": "r1",
-      "id": "a3"
+      "id": "a3",
+      "kind": "button",
+      "label": "Login",
+      "selectors": [
+        "button[type=\"submit\"]",
+        "form#login > button[type=\"submit\"]",
+        "#login > button[type=\"submit\"]"
+      ],
+      "region": "r1"
+    }
+  ],
+  "content": [
+    {
+      "id": "c1",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"email\"]",
+        "form#login > label[for=\"email\"]",
+        "#login > label[for=\"email\"]"
+      ],
+      "textContent": "Email",
+      "region": "r1"
+    },
+    {
+      "id": "c2",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"password\"]",
+        "form#login > label[for=\"password\"]",
+        "#login > label[for=\"password\"]"
+      ],
+      "textContent": "Password",
+      "region": "r1"
     }
   ],
   "stats": {
     "rawCandidates": 3,
     "emittedActions": 3,
+    "rawContentCandidates": 2,
+    "emittedContentNodes": 2,
     "emittedRegions": 1,
-    "bytes": 586
+    "bytesBeforeTrim": 1164,
+    "bytes": 1187
   }
 }

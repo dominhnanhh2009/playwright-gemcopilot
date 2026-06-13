@@ -1,0 +1,1593 @@
+{
+  "page": {
+    "title": "Semantic UI Tree Test Fixture",
+    "url": "about:blank"
+  },
+  "regions": [
+    {
+      "id": "r1",
+      "role": "navigation",
+      "label": "Primary navigation"
+    },
+    {
+      "id": "r2",
+      "role": "section",
+      "label": "Action elements section"
+    },
+    {
+      "id": "r3",
+      "role": "form",
+      "label": "Signup form"
+    },
+    {
+      "id": "r4",
+      "role": "section",
+      "label": "Editable content section"
+    },
+    {
+      "id": "r5",
+      "role": "section",
+      "label": "Lists section"
+    },
+    {
+      "id": "r6",
+      "role": "article",
+      "label": "Product card Alpha"
+    },
+    {
+      "id": "r7",
+      "role": "section",
+      "label": "Cards section"
+    },
+    {
+      "id": "r8",
+      "role": "table",
+      "label": "Orders table"
+    },
+    {
+      "id": "r9",
+      "role": "section",
+      "label": "Occlusion section"
+    },
+    {
+      "id": "r10",
+      "role": "section",
+      "label": "Dialog section"
+    },
+    {
+      "id": "r11",
+      "role": "dialog",
+      "label": "Fixture dialog"
+    },
+    {
+      "id": "r12",
+      "role": "aside",
+      "label": "Sidebar notes"
+    }
+  ],
+  "actions": [
+    {
+      "id": "a1",
+      "kind": "button",
+      "label": "Confirm dialog",
+      "selectors": [
+        "dialog#fixture-dialog > button:nth-of-type(1)",
+        "#fixture-dialog > button:nth-of-type(1)",
+        "dialog[aria-label=\"Fixture dialog\"] > button:nth-of-type(1)"
+      ],
+      "region": "r11",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a2",
+      "kind": "button",
+      "label": "Close dialog",
+      "selectors": [
+        "dialog#fixture-dialog > button.secondary",
+        "#fixture-dialog > button.secondary",
+        "dialog[aria-label=\"Fixture dialog\"] > button.secondary"
+      ],
+      "region": "r11",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a3",
+      "kind": "input",
+      "label": "Email address",
+      "value": "linh@example.com",
+      "selectors": [
+        "input#email-input",
+        "#email-input",
+        "input[name=\"email\"][type=\"email\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "editable"
+      ]
+    },
+    {
+      "id": "a4",
+      "kind": "input",
+      "label": "Full name from wrapping label",
+      "value": "Nguyen Van A",
+      "selectors": [
+        "input[name=\"fullName\"][type=\"text\"]",
+        "input[type=\"text\"][value=\"Nguyen Van A\"]",
+        "input[name=\"fullName\"][value=\"Nguyen Van A\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "editable"
+      ]
+    },
+    {
+      "id": "a5",
+      "kind": "input",
+      "label": "Search query",
+      "value": "computer vision model for UI automation",
+      "selectors": [
+        "input#query-input",
+        "#query-input",
+        "input[name=\"q\"][placeholder=\"Search products\"]"
+      ],
+      "sub": "Enter",
+      "region": "r3",
+      "state": [
+        "editable"
+      ]
+    },
+    {
+      "id": "a6",
+      "kind": "textbox",
+      "label": "Biography",
+      "value": "This textarea value is longer than twenty characters and should use preview plus length.",
+      "selectors": [
+        "textarea#bio-textarea",
+        "#bio-textarea",
+        "textarea[name=\"bio\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "editable"
+      ]
+    },
+    {
+      "id": "a7",
+      "kind": "textbox",
+      "label": "Editable notes",
+      "selectors": [
+        "div[aria-label=\"Editable notes\"]",
+        "div[aria-label=\"Editable notes\"][role=\"textbox\"]",
+        "div[role=\"textbox\"]"
+      ],
+      "region": "r4",
+      "state": [
+        "editable"
+      ]
+    },
+    {
+      "id": "a8",
+      "kind": "link",
+      "label": "Skip to content",
+      "selectors": [
+        "a[href=\"#content\"]",
+        "nav[aria-label=\"Primary navigation\"] > a[href=\"#content\"]",
+        "html > body > nav[aria-label=\"Primary navigation\"] > a[href=\"#content\"]"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a9",
+      "kind": "link",
+      "label": "Overview",
+      "selectors": [
+        "a[href=\"#overview\"]",
+        "nav[aria-label=\"Primary navigation\"] > a[href=\"#overview\"]",
+        "html > body > nav[aria-label=\"Primary navigation\"] > a[href=\"#overview\"]"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a10",
+      "kind": "link",
+      "label": "Forms",
+      "selectors": [
+        "a[href=\"#forms\"]",
+        "nav[aria-label=\"Primary navigation\"] > a[href=\"#forms\"]",
+        "html > body > nav[aria-label=\"Primary navigation\"] > a[href=\"#forms\"]"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a11",
+      "kind": "link",
+      "label": "Table",
+      "selectors": [
+        "a[href=\"#table\"]",
+        "nav[aria-label=\"Primary navigation\"] > a[href=\"#table\"]",
+        "html > body > nav[aria-label=\"Primary navigation\"] > a[href=\"#table\"]"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a12",
+      "kind": "link",
+      "label": "Open dialog link",
+      "selectors": [
+        "a[role=\"button\"][href=\"#dialog-zone\"]",
+        "a[href=\"#dialog-zone\"]",
+        "a[role=\"button\"]"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a13",
+      "kind": "button",
+      "label": "Open account menu",
+      "selectors": [
+        "button[aria-label=\"Open account menu\"]",
+        "nav[aria-label=\"Primary navigation\"] > button[aria-label=\"Open account menu\"]",
+        "html > body > nav[aria-label=\"Primary navigation\"] > button[aria-label=\"Open account menu\"]"
+      ],
+      "region": "r1"
+    },
+    {
+      "id": "a14",
+      "kind": "button",
+      "label": "Save",
+      "selectors": [
+        "button#save-button",
+        "#save-button",
+        "section#buttons > button#save-button"
+      ],
+      "region": "r2",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a15",
+      "kind": "button",
+      "label": "Cancel operation with a long visible button label",
+      "selectors": [
+        "section#buttons > button.secondary",
+        "#buttons > button.secondary",
+        "section[aria-label=\"Action elements section\"] > button.secondary"
+      ],
+      "region": "r2",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a16",
+      "kind": "button",
+      "label": "Delete selected record",
+      "selectors": [
+        "button[aria-label=\"Delete selected record\"]",
+        "button.danger",
+        "section#buttons > button[aria-label=\"Delete selected record\"]"
+      ],
+      "region": "r2",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a17",
+      "kind": "button",
+      "label": "Refresh data from server",
+      "selectors": [
+        "button[title=\"Refresh data from server\"]",
+        "section#buttons > button[title=\"Refresh data from server\"]",
+        "#buttons > button[title=\"Refresh data from server\"]"
+      ],
+      "region": "r2",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a18",
+      "kind": "button",
+      "label": "Export CSV",
+      "selectors": [
+        "button[data-testid=\"export-csv-button\"]",
+        "[data-testid=\"export-csv-button\"]",
+        "section#buttons > button[data-testid=\"export-csv-button\"]"
+      ],
+      "region": "r2",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a19",
+      "kind": "link",
+      "label": "Go to settings page",
+      "selectors": [
+        "a[title=\"Go to settings page\"][href=\"/settings\"]",
+        "a[title=\"Go to settings page\"]",
+        "a[href=\"/settings\"]"
+      ],
+      "region": "r2",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a20",
+      "kind": "button",
+      "label": "Custom div button",
+      "selectors": [
+        "div[aria-label=\"Custom div button\"]",
+        "div[aria-label=\"Custom div button\"][role=\"button\"]",
+        "div[role=\"button\"]"
+      ],
+      "region": "r2",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a21",
+      "kind": "select",
+      "label": "Role",
+      "value": "developer",
+      "selectors": [
+        "select#role-select",
+        "#role-select",
+        "select[name=\"role\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a22",
+      "kind": "checkbox",
+      "label": "I agree to the terms and conditions",
+      "selectors": [
+        "input[name=\"agree\"][type=\"checkbox\"]",
+        "input[name=\"agree\"]",
+        "input[type=\"checkbox\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "checked",
+        "occluded"
+      ]
+    },
+    {
+      "id": "a23",
+      "kind": "radio",
+      "label": "Basic plan",
+      "value": "basic",
+      "selectors": [
+        "input[name=\"plan\"][value=\"basic\"]",
+        "input[type=\"radio\"][value=\"basic\"]",
+        "input[value=\"basic\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a24",
+      "kind": "radio",
+      "label": "Pro plan",
+      "value": "pro",
+      "selectors": [
+        "input[name=\"plan\"][value=\"pro\"]",
+        "input[type=\"radio\"][value=\"pro\"]",
+        "input[value=\"pro\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "checked",
+        "occluded"
+      ]
+    },
+    {
+      "id": "a25",
+      "kind": "button",
+      "label": "Create account",
+      "selectors": [
+        "button[type=\"submit\"]",
+        "form#signup-form > button[type=\"submit\"]",
+        "#signup-form > button[type=\"submit\"]"
+      ],
+      "region": "r3",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a26",
+      "kind": "button",
+      "label": "Edit second task",
+      "selectors": [
+        "button[aria-label=\"Edit second task\"]",
+        "section#lists > ul > li:nth-of-type(3) > button[aria-label=\"Edit second task\"]",
+        "#lists > ul > li:nth-of-type(3) > button[aria-label=\"Edit second task\"]"
+      ],
+      "region": "r5",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a27",
+      "kind": "button",
+      "label": "Add Alpha",
+      "selectors": [
+        "article[aria-label=\"Product card Alpha\"] > button",
+        "section#cards > div.cards > article[aria-label=\"Product card Alpha\"] > button",
+        "#cards > div.cards > article[aria-label=\"Product card Alpha\"] > button"
+      ],
+      "region": "r6",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a28",
+      "kind": "button",
+      "label": "Add Beta",
+      "selectors": [
+        "article[aria-labelledby=\"beta-title\"] > button",
+        "section#cards > div.cards > article[aria-labelledby=\"beta-title\"] > button",
+        "#cards > div.cards > article[aria-labelledby=\"beta-title\"] > button"
+      ],
+      "region": "r7",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a29",
+      "kind": "button",
+      "label": "Approve",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(4) > button",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(4) > button",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(4) > button"
+      ],
+      "region": "r8",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a30",
+      "kind": "button",
+      "label": "View details",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(4) > button",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(4) > button",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(4) > button"
+      ],
+      "region": "r8",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a31",
+      "kind": "button",
+      "label": "Covered button",
+      "selectors": [
+        "button.occluded-button",
+        "section#occlusion > div.occluder-wrap > button.occluded-button",
+        "#occlusion > div.occluder-wrap > button.occluded-button"
+      ],
+      "region": "r9",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a32",
+      "kind": "button",
+      "label": "Show dialog",
+      "selectors": [
+        "button#show-dialog",
+        "#show-dialog",
+        "section#dialog-zone > button#show-dialog"
+      ],
+      "region": "r10",
+      "state": [
+        "occluded"
+      ]
+    },
+    {
+      "id": "a33",
+      "kind": "button",
+      "label": "Sidebar action",
+      "selectors": [
+        "aside[aria-label=\"Sidebar notes\"] > button",
+        "main#content > aside[aria-label=\"Sidebar notes\"] > button",
+        "#content > aside[aria-label=\"Sidebar notes\"] > button"
+      ],
+      "region": "r12",
+      "state": [
+        "occluded"
+      ]
+    }
+  ],
+  "content": [
+    {
+      "id": "c1",
+      "kind": "heading",
+      "selectors": [
+        "section#buttons > h2",
+        "#buttons > h2",
+        "section[aria-label=\"Action elements section\"] > h2"
+      ],
+      "textContent": "Action Elements",
+      "region": "r2"
+    },
+    {
+      "id": "c2",
+      "kind": "heading",
+      "selectors": [
+        "section#editable > h2",
+        "#editable > h2",
+        "section[aria-label=\"Editable content section\"] > h2"
+      ],
+      "textContent": "Editable Content",
+      "region": "r4"
+    },
+    {
+      "id": "c3",
+      "kind": "heading",
+      "selectors": [
+        "section#lists > h2",
+        "#lists > h2",
+        "section[aria-label=\"Lists section\"] > h2"
+      ],
+      "textContent": "Lists",
+      "region": "r5"
+    },
+    {
+      "id": "c4",
+      "kind": "heading",
+      "selectors": [
+        "section#cards > h2",
+        "#cards > h2",
+        "section[aria-label=\"Cards section\"] > h2"
+      ],
+      "textContent": "Cards and Groups",
+      "region": "r7"
+    },
+    {
+      "id": "c5",
+      "kind": "heading",
+      "selectors": [
+        "article[aria-label=\"Product card Alpha\"] > h3",
+        "section#cards > div.cards > article[aria-label=\"Product card Alpha\"] > h3",
+        "#cards > div.cards > article[aria-label=\"Product card Alpha\"] > h3"
+      ],
+      "textContent": "Alpha Camera",
+      "region": "r6"
+    },
+    {
+      "id": "c6",
+      "kind": "heading",
+      "selectors": [
+        "h3#beta-title",
+        "#beta-title",
+        "article[aria-labelledby=\"beta-title\"] > h3#beta-title"
+      ],
+      "textContent": "Beta Sensor",
+      "region": "r7"
+    },
+    {
+      "id": "c7",
+      "kind": "heading",
+      "selectors": [
+        "section#occlusion > h2",
+        "#occlusion > h2",
+        "section[aria-label=\"Occlusion section\"] > h2"
+      ],
+      "textContent": "Occlusion",
+      "region": "r9"
+    },
+    {
+      "id": "c8",
+      "kind": "heading",
+      "selectors": [
+        "section#dialog-zone > h2",
+        "#dialog-zone > h2",
+        "section[aria-label=\"Dialog section\"] > h2"
+      ],
+      "textContent": "Dialog Zone",
+      "region": "r10"
+    },
+    {
+      "id": "c9",
+      "kind": "heading",
+      "selectors": [
+        "dialog#fixture-dialog > h2",
+        "#fixture-dialog > h2",
+        "dialog[aria-label=\"Fixture dialog\"] > h2"
+      ],
+      "textContent": "Visible Dialog",
+      "region": "r11"
+    },
+    {
+      "id": "c10",
+      "kind": "heading",
+      "selectors": [
+        "aside[aria-label=\"Sidebar notes\"] > h2",
+        "main#content > aside[aria-label=\"Sidebar notes\"] > h2",
+        "#content > aside[aria-label=\"Sidebar notes\"] > h2"
+      ],
+      "textContent": "Sidebar",
+      "region": "r12"
+    },
+    {
+      "id": "c11",
+      "kind": "heading",
+      "selectors": [
+        "section#overview > h2",
+        "#overview > h2",
+        "section[aria-label=\"Content elements section\"] > h2"
+      ],
+      "textContent": "Content Elements"
+    },
+    {
+      "id": "c12",
+      "kind": "heading",
+      "selectors": [
+        "section#overview > h3",
+        "#overview > h3",
+        "section[aria-label=\"Content elements section\"] > h3"
+      ],
+      "textContent": "Short heading"
+    },
+    {
+      "id": "c13",
+      "kind": "heading",
+      "selectors": [
+        "section#forms > h2",
+        "#forms > h2",
+        "section[aria-label=\"Form controls section\"] > h2"
+      ],
+      "textContent": "Form Controls"
+    },
+    {
+      "id": "c14",
+      "kind": "heading",
+      "selectors": [
+        "section#table > h2",
+        "#table > h2",
+        "section[aria-label=\"Table section\"] > h2"
+      ],
+      "textContent": "Table"
+    },
+    {
+      "id": "c15",
+      "kind": "heading",
+      "selectors": [
+        "section#hidden-tests > h2",
+        "#hidden-tests > h2",
+        "section[aria-label=\"Hidden elements section\"] > h2"
+      ],
+      "textContent": "Hidden Elements"
+    },
+    {
+      "id": "c16",
+      "kind": "heading",
+      "selectors": [
+        "header[aria-label=\"Site header\"] > h1",
+        "header[aria-label=\"Site header\"][role=\"banner\"] > h1",
+        "header[role=\"banner\"] > h1"
+      ],
+      "textContentPreview": "Semantic UI Tree Tes",
+      "textContentLength": 29
+    },
+    {
+      "id": "c17",
+      "kind": "heading",
+      "selectors": [
+        "section#overview > h4",
+        "#overview > h4",
+        "section[aria-label=\"Content elements section\"] > h4"
+      ],
+      "textContentPreview": "This heading is deli",
+      "textContentLength": 58
+    },
+    {
+      "id": "c18",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"email-input\"]",
+        "form#signup-form > label[for=\"email-input\"]",
+        "#signup-form > label[for=\"email-input\"]"
+      ],
+      "textContent": "Email address",
+      "region": "r3"
+    },
+    {
+      "id": "c19",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"query-input\"]",
+        "form#signup-form > label[for=\"query-input\"]",
+        "#signup-form > label[for=\"query-input\"]"
+      ],
+      "textContent": "Search query",
+      "region": "r3"
+    },
+    {
+      "id": "c20",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"bio-textarea\"]",
+        "form#signup-form > label[for=\"bio-textarea\"]",
+        "#signup-form > label[for=\"bio-textarea\"]"
+      ],
+      "textContent": "Biography",
+      "region": "r3"
+    },
+    {
+      "id": "c21",
+      "kind": "label",
+      "selectors": [
+        "label[for=\"role-select\"]",
+        "form#signup-form > label[for=\"role-select\"]",
+        "#signup-form > label[for=\"role-select\"]"
+      ],
+      "textContent": "Role",
+      "region": "r3"
+    },
+    {
+      "id": "c22",
+      "kind": "label",
+      "selectors": [
+        "form#signup-form > label:nth-of-type(7)",
+        "#signup-form > label:nth-of-type(7)",
+        "form[aria-label=\"Signup form\"] > label:nth-of-type(7)"
+      ],
+      "textContent": "Basic plan",
+      "region": "r3"
+    },
+    {
+      "id": "c23",
+      "kind": "label",
+      "selectors": [
+        "form#signup-form > label:nth-of-type(8)",
+        "#signup-form > label:nth-of-type(8)",
+        "form[aria-label=\"Signup form\"] > label:nth-of-type(8)"
+      ],
+      "textContent": "Pro plan",
+      "region": "r3"
+    },
+    {
+      "id": "c24",
+      "kind": "listitem",
+      "selectors": [
+        "section#lists > ul > li:nth-of-type(1)",
+        "#lists > ul > li:nth-of-type(1)",
+        "section[aria-label=\"Lists section\"] > ul > li:nth-of-type(1)"
+      ],
+      "textContent": "Short item",
+      "region": "r5"
+    },
+    {
+      "id": "c25",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(1)",
+        "section#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(1)",
+        "#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(1)"
+      ],
+      "textContent": "Order ID",
+      "region": "r8"
+    },
+    {
+      "id": "c26",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(2)",
+        "section#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(2)",
+        "#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(2)"
+      ],
+      "textContent": "Customer",
+      "region": "r8"
+    },
+    {
+      "id": "c27",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(3)",
+        "section#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(3)",
+        "#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(3)"
+      ],
+      "textContent": "Status",
+      "region": "r8"
+    },
+    {
+      "id": "c28",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(4)",
+        "section#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(4)",
+        "#table > table[aria-label=\"Orders table\"] > thead > tr > th:nth-of-type(4)"
+      ],
+      "textContent": "Action",
+      "region": "r8"
+    },
+    {
+      "id": "c29",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(1)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(1)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(1)"
+      ],
+      "textContent": "#1001",
+      "region": "r8"
+    },
+    {
+      "id": "c30",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(2)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(2)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(2)"
+      ],
+      "textContent": "Short name",
+      "region": "r8"
+    },
+    {
+      "id": "c31",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(4)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(4)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(4)"
+      ],
+      "textContent": "Approve",
+      "region": "r8"
+    },
+    {
+      "id": "c32",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(1)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(1)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(1)"
+      ],
+      "textContent": "#1002",
+      "region": "r8"
+    },
+    {
+      "id": "c33",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(3)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(3)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(3)"
+      ],
+      "textContent": "Shipped",
+      "region": "r8"
+    },
+    {
+      "id": "c34",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(4)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(4)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(4)"
+      ],
+      "textContent": "View details",
+      "region": "r8"
+    },
+    {
+      "id": "c35",
+      "kind": "paragraph",
+      "selectors": [
+        "aside[aria-label=\"Sidebar notes\"] > p:nth-of-type(1)",
+        "main#content > aside[aria-label=\"Sidebar notes\"] > p:nth-of-type(1)",
+        "#content > aside[aria-label=\"Sidebar notes\"] > p:nth-of-type(1)"
+      ],
+      "textContent": "Short side.",
+      "region": "r12"
+    },
+    {
+      "id": "c36",
+      "kind": "label",
+      "selectors": [
+        "form#signup-form > label:nth-of-type(2)",
+        "#signup-form > label:nth-of-type(2)",
+        "form[aria-label=\"Signup form\"] > label:nth-of-type(2)"
+      ],
+      "textContentPreview": "Full name from wrapp",
+      "textContentLength": 29,
+      "region": "r3"
+    },
+    {
+      "id": "c37",
+      "kind": "label",
+      "selectors": [
+        "form#signup-form > label:nth-of-type(6)",
+        "#signup-form > label:nth-of-type(6)",
+        "form[aria-label=\"Signup form\"] > label:nth-of-type(6)"
+      ],
+      "textContentPreview": "I agree to the terms",
+      "textContentLength": 35,
+      "region": "r3"
+    },
+    {
+      "id": "c38",
+      "kind": "listitem",
+      "selectors": [
+        "section#lists > ul > li:nth-of-type(2)",
+        "#lists > ul > li:nth-of-type(2)",
+        "section[aria-label=\"Lists section\"] > ul > li:nth-of-type(2)"
+      ],
+      "textContentPreview": "Second list item wit",
+      "textContentLength": 69,
+      "region": "r5"
+    },
+    {
+      "id": "c39",
+      "kind": "listitem",
+      "selectors": [
+        "section#lists > ul > li:nth-of-type(3)",
+        "#lists > ul > li:nth-of-type(3)",
+        "section[aria-label=\"Lists section\"] > ul > li:nth-of-type(3)"
+      ],
+      "textContentPreview": "Item with action Edi",
+      "textContentLength": 21,
+      "region": "r5"
+    },
+    {
+      "id": "c40",
+      "kind": "paragraph",
+      "selectors": [
+        "article[aria-label=\"Product card Alpha\"] > p",
+        "section#cards > div.cards > article[aria-label=\"Product card Alpha\"] > p",
+        "#cards > div.cards > article[aria-label=\"Product card Alpha\"] > p"
+      ],
+      "textContentPreview": "Compact camera card ",
+      "textContentLength": 62,
+      "region": "r6"
+    },
+    {
+      "id": "c41",
+      "kind": "paragraph",
+      "selectors": [
+        "article[aria-labelledby=\"beta-title\"] > p",
+        "section#cards > div.cards > article[aria-labelledby=\"beta-title\"] > p",
+        "#cards > div.cards > article[aria-labelledby=\"beta-title\"] > p"
+      ],
+      "textContentPreview": "Beta card text that ",
+      "textContentLength": 66,
+      "region": "r7"
+    },
+    {
+      "id": "c42",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(3)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(3)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(1) > td:nth-of-type(3)"
+      ],
+      "textContentPreview": "Pending confirmation",
+      "textContentLength": 35,
+      "region": "r8"
+    },
+    {
+      "id": "c43",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(2)",
+        "section#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(2)",
+        "#table > table[aria-label=\"Orders table\"] > tbody > tr:nth-of-type(2) > td:nth-of-type(2)"
+      ],
+      "textContentPreview": "Customer with a very",
+      "textContentLength": 38,
+      "region": "r8"
+    },
+    {
+      "id": "c44",
+      "kind": "paragraph",
+      "selectors": [
+        "dialog#fixture-dialog > p",
+        "#fixture-dialog > p",
+        "dialog[aria-label=\"Fixture dialog\"] > p"
+      ],
+      "textContentPreview": "This dialog paragrap",
+      "textContentLength": 55,
+      "region": "r11"
+    },
+    {
+      "id": "c45",
+      "kind": "paragraph",
+      "selectors": [
+        "aside[aria-label=\"Sidebar notes\"] > p:nth-of-type(2)",
+        "main#content > aside[aria-label=\"Sidebar notes\"] > p:nth-of-type(2)",
+        "#content > aside[aria-label=\"Sidebar notes\"] > p:nth-of-type(2)"
+      ],
+      "textContentPreview": "This sidebar note is",
+      "textContentLength": 76,
+      "region": "r12"
+    },
+    {
+      "id": "c46",
+      "kind": "paragraph",
+      "selectors": [
+        "header[aria-label=\"Site header\"] > p:nth-of-type(1)",
+        "header[aria-label=\"Site header\"][role=\"banner\"] > p:nth-of-type(1)",
+        "header[role=\"banner\"] > p:nth-of-type(1)"
+      ],
+      "textContent": "Header short."
+    },
+    {
+      "id": "c47",
+      "kind": "paragraph",
+      "selectors": [
+        "section#overview > p:nth-of-type(1)",
+        "#overview > p:nth-of-type(1)",
+        "section[aria-label=\"Content elements section\"] > p:nth-of-type(1)"
+      ],
+      "textContent": "Short paragraph."
+    },
+    {
+      "id": "c48",
+      "kind": "input",
+      "selectors": [
+        "input#email-input",
+        "#email-input",
+        "input[name=\"email\"][type=\"email\"]"
+      ],
+      "textContent": "linh@example.com",
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c49",
+      "kind": "input",
+      "selectors": [
+        "input[name=\"fullName\"][type=\"text\"]",
+        "input[type=\"text\"][value=\"Nguyen Van A\"]",
+        "input[name=\"fullName\"][value=\"Nguyen Van A\"]"
+      ],
+      "textContent": "Nguyen Van A",
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c50",
+      "kind": "input",
+      "selectors": [
+        "input[name=\"agree\"][type=\"checkbox\"]",
+        "input[name=\"agree\"]",
+        "input[type=\"checkbox\"]"
+      ],
+      "textContent": "on",
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c51",
+      "kind": "input",
+      "selectors": [
+        "input[name=\"plan\"][value=\"basic\"]",
+        "input[type=\"radio\"][value=\"basic\"]",
+        "input[value=\"basic\"]"
+      ],
+      "textContent": "basic",
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c52",
+      "kind": "input",
+      "selectors": [
+        "input[name=\"plan\"][value=\"pro\"]",
+        "input[type=\"radio\"][value=\"pro\"]",
+        "input[value=\"pro\"]"
+      ],
+      "textContent": "pro",
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c53",
+      "kind": "paragraph",
+      "selectors": [
+        "footer[aria-label=\"Footer\"] > p:nth-of-type(1)",
+        "footer[aria-label=\"Footer\"][role=\"contentinfo\"] > p:nth-of-type(1)",
+        "footer[role=\"contentinfo\"] > p:nth-of-type(1)"
+      ],
+      "textContent": "Footer short."
+    },
+    {
+      "id": "c54",
+      "kind": "paragraph",
+      "selectors": [
+        "header[aria-label=\"Site header\"] > p:nth-of-type(2)",
+        "header[aria-label=\"Site header\"][role=\"banner\"] > p:nth-of-type(2)",
+        "header[role=\"banner\"] > p:nth-of-type(2)"
+      ],
+      "textContentPreview": "This header paragrap",
+      "textContentLength": 132
+    },
+    {
+      "id": "c55",
+      "kind": "paragraph",
+      "selectors": [
+        "p#long-paragraph",
+        "#long-paragraph",
+        "section#overview > p#long-paragraph"
+      ],
+      "textContentPreview": "This paragraph conta",
+      "textContentLength": 148
+    },
+    {
+      "id": "c56",
+      "kind": "paragraph",
+      "selectors": [
+        "section#overview > details > p",
+        "#overview > details > p",
+        "section[aria-label=\"Content elements section\"] > details > p"
+      ],
+      "textContentPreview": "Details body content",
+      "textContentLength": 55
+    },
+    {
+      "id": "c57",
+      "kind": "input",
+      "selectors": [
+        "input#query-input",
+        "#query-input",
+        "input[name=\"q\"][placeholder=\"Search products\"]"
+      ],
+      "textContentPreview": "computer vision mode",
+      "textContentLength": 39,
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c58",
+      "kind": "textbox",
+      "selectors": [
+        "textarea#bio-textarea",
+        "#bio-textarea",
+        "textarea[name=\"bio\"]"
+      ],
+      "textContentPreview": "This textarea value ",
+      "textContentLength": 88,
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c59",
+      "kind": "select",
+      "selectors": [
+        "select#role-select",
+        "#role-select",
+        "select[name=\"role\"]"
+      ],
+      "textContentPreview": "Developer with a lon",
+      "textContentLength": 34,
+      "region": "r3",
+      "actionLinked": true
+    },
+    {
+      "id": "c60",
+      "kind": "textbox",
+      "selectors": [
+        "div[aria-label=\"Editable notes\"]",
+        "div[aria-label=\"Editable notes\"][role=\"textbox\"]",
+        "div[role=\"textbox\"]"
+      ],
+      "label": "Editable notes",
+      "textContentPreview": "Editable note conten",
+      "textContentLength": 52,
+      "region": "r4",
+      "actionLinked": true
+    },
+    {
+      "id": "c61",
+      "kind": "paragraph",
+      "selectors": [
+        "p.visually-hidden",
+        "section#hidden-tests > p.visually-hidden",
+        "#hidden-tests > p.visually-hidden"
+      ],
+      "textContentPreview": "Visually hidden but ",
+      "textContentLength": 75
+    },
+    {
+      "id": "c62",
+      "kind": "paragraph",
+      "selectors": [
+        "footer[aria-label=\"Footer\"] > p:nth-of-type(2)",
+        "footer[aria-label=\"Footer\"][role=\"contentinfo\"] > p:nth-of-type(2)",
+        "footer[role=\"contentinfo\"] > p:nth-of-type(2)"
+      ],
+      "textContentPreview": "This footer paragrap",
+      "textContentLength": 73
+    },
+    {
+      "id": "c63",
+      "kind": "option",
+      "selectors": [
+        "option[value=\"teacher\"]",
+        "select#role-select > option[value=\"teacher\"]",
+        "#role-select > option[value=\"teacher\"]"
+      ],
+      "textContent": "Teacher",
+      "region": "r3"
+    },
+    {
+      "id": "c64",
+      "kind": "output",
+      "selectors": [
+        "output[name=\"result\"]",
+        "section#editable > output[name=\"result\"]",
+        "#editable > output[name=\"result\"]"
+      ],
+      "textContent": "42",
+      "region": "r4"
+    },
+    {
+      "id": "c65",
+      "kind": "dt",
+      "selectors": [
+        "section#lists > dl > dt",
+        "#lists > dl > dt",
+        "section[aria-label=\"Lists section\"] > dl > dt"
+      ],
+      "textContent": "Term",
+      "region": "r5"
+    },
+    {
+      "id": "c66",
+      "kind": "option",
+      "selectors": [
+        "option[value=\"developer\"]",
+        "select#role-select > option[value=\"developer\"]",
+        "#role-select > option[value=\"developer\"]"
+      ],
+      "textContentPreview": "Developer with a lon",
+      "textContentLength": 34,
+      "region": "r3"
+    },
+    {
+      "id": "c67",
+      "kind": "div",
+      "selectors": [
+        "section#editable > div:nth-of-type(2)",
+        "#editable > div:nth-of-type(2)",
+        "section[aria-label=\"Editable content section\"] > div:nth-of-type(2)"
+      ],
+      "textContentPreview": "Live status message ",
+      "textContentLength": 50,
+      "region": "r4"
+    },
+    {
+      "id": "c68",
+      "kind": "alert",
+      "selectors": [
+        "div[role=\"alert\"]",
+        "section#editable > div[role=\"alert\"]",
+        "#editable > div[role=\"alert\"]"
+      ],
+      "textContentPreview": "Alert text with more",
+      "textContentLength": 44,
+      "region": "r4"
+    },
+    {
+      "id": "c69",
+      "kind": "dd",
+      "selectors": [
+        "section#lists > dl > dd",
+        "#lists > dl > dd",
+        "section[aria-label=\"Lists section\"] > dl > dd"
+      ],
+      "textContentPreview": "Definition text that",
+      "textContentLength": 54,
+      "region": "r5"
+    },
+    {
+      "id": "c70",
+      "kind": "caption",
+      "selectors": [
+        "table[aria-label=\"Orders table\"] > caption",
+        "section#table > table[aria-label=\"Orders table\"] > caption",
+        "#table > table[aria-label=\"Orders table\"] > caption"
+      ],
+      "textContentPreview": "Recent orders captio",
+      "textContentLength": 55,
+      "region": "r8"
+    },
+    {
+      "id": "c71",
+      "kind": "span",
+      "selectors": [
+        "section#overview > span:nth-of-type(1)",
+        "#overview > span:nth-of-type(1)",
+        "section[aria-label=\"Content elements section\"] > span:nth-of-type(1)"
+      ],
+      "textContent": "Short span"
+    },
+    {
+      "id": "c72",
+      "kind": "code",
+      "selectors": [
+        "section#overview > pre",
+        "#overview > pre",
+        "section[aria-label=\"Content elements section\"] > pre"
+      ],
+      "textContent": "const answer = 42;"
+    },
+    {
+      "id": "c73",
+      "kind": "code",
+      "selectors": [
+        "section#overview > code",
+        "#overview > code",
+        "section[aria-label=\"Content elements section\"] > code"
+      ],
+      "textContent": "inlineCode()"
+    },
+    {
+      "id": "c74",
+      "kind": "span",
+      "selectors": [
+        "section#overview > span:nth-of-type(2)",
+        "#overview > span:nth-of-type(2)",
+        "section[aria-label=\"Content elements section\"] > span:nth-of-type(2)"
+      ],
+      "textContentPreview": "This span is deliber",
+      "textContentLength": 62
+    },
+    {
+      "id": "c75",
+      "kind": "quote",
+      "selectors": [
+        "section#overview > blockquote",
+        "#overview > blockquote",
+        "section[aria-label=\"Content elements section\"] > blockquote"
+      ],
+      "textContentPreview": "A quoted block with ",
+      "textContentLength": 69
+    },
+    {
+      "id": "c76",
+      "kind": "figcaption",
+      "selectors": [
+        "section#overview > figure > figcaption",
+        "#overview > figure > figcaption",
+        "section[aria-label=\"Content elements section\"] > figure > figcaption"
+      ],
+      "textContentPreview": "This figure caption ",
+      "textContentLength": 61
+    },
+    {
+      "id": "c77",
+      "kind": "summary",
+      "selectors": [
+        "section#overview > details > summary",
+        "#overview > details > summary",
+        "section[aria-label=\"Content elements section\"] > details > summary"
+      ],
+      "textContentPreview": "Expandable summary t",
+      "textContentLength": 39
+    },
+    {
+      "id": "c78",
+      "kind": "article",
+      "selectors": [
+        "article[aria-label=\"Product card Alpha\"]",
+        "section#cards > div.cards > article[aria-label=\"Product card Alpha\"]",
+        "#cards > div.cards > article[aria-label=\"Product card Alpha\"]"
+      ],
+      "label": "Product card Alpha",
+      "textContentPreview": "Alpha Camera Compact",
+      "textContentLength": 53,
+      "region": "r7"
+    },
+    {
+      "id": "c79",
+      "kind": "article",
+      "selectors": [
+        "article[aria-labelledby=\"beta-title\"]",
+        "section#cards > div.cards > article[aria-labelledby=\"beta-title\"]",
+        "#cards > div.cards > article[aria-labelledby=\"beta-title\"]"
+      ],
+      "label": "Beta Sensor",
+      "textContentPreview": "Beta Sensor Beta car",
+      "textContentLength": 52,
+      "region": "r7"
+    },
+    {
+      "id": "c80",
+      "kind": "section",
+      "selectors": [
+        "section#buttons",
+        "#buttons",
+        "section[aria-label=\"Action elements section\"]"
+      ],
+      "label": "Action elements section",
+      "textContent": "Action Elements"
+    },
+    {
+      "id": "c81",
+      "kind": "banner",
+      "selectors": [
+        "header[aria-label=\"Site header\"]",
+        "header[aria-label=\"Site header\"][role=\"banner\"]",
+        "header[role=\"banner\"]"
+      ],
+      "label": "Site header",
+      "textContentPreview": "Semantic UI Tree Tes",
+      "textContentLength": 84
+    },
+    {
+      "id": "c82",
+      "kind": "main",
+      "selectors": [
+        "main#content",
+        "#content",
+        "main[aria-label=\"Main test area\"]"
+      ],
+      "label": "Main test area",
+      "textContentPreview": "Content Elements Sho",
+      "textContentLength": 81
+    },
+    {
+      "id": "c83",
+      "kind": "section",
+      "selectors": [
+        "section#overview",
+        "#overview",
+        "section[aria-label=\"Content elements section\"]"
+      ],
+      "label": "Content elements section",
+      "textContentPreview": "Content Elements Sho",
+      "textContentLength": 336
+    },
+    {
+      "id": "c84",
+      "kind": "section",
+      "selectors": [
+        "section#forms",
+        "#forms",
+        "section[aria-label=\"Form controls section\"]"
+      ],
+      "label": "Form controls section",
+      "textContentPreview": "Form Controls Email ",
+      "textContentLength": 54
+    },
+    {
+      "id": "c85",
+      "kind": "section",
+      "selectors": [
+        "section#editable",
+        "#editable",
+        "section[aria-label=\"Editable content section\"]"
+      ],
+      "label": "Editable content section",
+      "textContentPreview": "Editable Content 42 ",
+      "textContentLength": 101
+    },
+    {
+      "id": "c86",
+      "kind": "section",
+      "selectors": [
+        "section#lists",
+        "#lists",
+        "section[aria-label=\"Lists section\"]"
+      ],
+      "label": "Lists section",
+      "textContentPreview": "Lists Short item Sec",
+      "textContentLength": 87
+    },
+    {
+      "id": "c87",
+      "kind": "section",
+      "selectors": [
+        "section#cards",
+        "#cards",
+        "section[aria-label=\"Cards section\"]"
+      ],
+      "label": "Cards section",
+      "textContentPreview": "Cards and Groups Alp",
+      "textContentLength": 57
+    },
+    {
+      "id": "c88",
+      "kind": "section",
+      "selectors": [
+        "section#table",
+        "#table",
+        "section[aria-label=\"Table section\"]"
+      ],
+      "label": "Table section",
+      "textContentPreview": "Table Recent orders ",
+      "textContentLength": 46
+    },
+    {
+      "id": "c89",
+      "kind": "section",
+      "selectors": [
+        "section#hidden-tests",
+        "#hidden-tests",
+        "section[aria-label=\"Hidden elements section\"]"
+      ],
+      "label": "Hidden elements section",
+      "textContentPreview": "Hidden Elements Visu",
+      "textContentLength": 56
+    },
+    {
+      "id": "c90",
+      "kind": "section",
+      "selectors": [
+        "section#occlusion",
+        "#occlusion",
+        "section[aria-label=\"Occlusion section\"]"
+      ],
+      "label": "Occlusion section",
+      "textContentPreview": "Occlusion Covered bu",
+      "textContentLength": 46
+    },
+    {
+      "id": "c91",
+      "kind": "section",
+      "selectors": [
+        "section#dialog-zone",
+        "#dialog-zone",
+        "section[aria-label=\"Dialog section\"]"
+      ],
+      "label": "Dialog section",
+      "textContentPreview": "Dialog Zone Visible ",
+      "textContentLength": 52
+    },
+    {
+      "id": "c92",
+      "kind": "aside",
+      "selectors": [
+        "aside[aria-label=\"Sidebar notes\"]",
+        "main#content > aside[aria-label=\"Sidebar notes\"]",
+        "#content > aside[aria-label=\"Sidebar notes\"]"
+      ],
+      "label": "Sidebar notes",
+      "textContentPreview": "Sidebar Short side. ",
+      "textContentLength": 60
+    },
+    {
+      "id": "c93",
+      "kind": "contentinfo",
+      "selectors": [
+        "footer[aria-label=\"Footer\"]",
+        "footer[aria-label=\"Footer\"][role=\"contentinfo\"]",
+        "footer[role=\"contentinfo\"]"
+      ],
+      "label": "Footer",
+      "textContentPreview": "Footer short. This f",
+      "textContentLength": 54
+    }
+  ],
+  "stats": {
+    "rawCandidates": 33,
+    "emittedActions": 33,
+    "rawContentCandidates": 93,
+    "emittedContentNodes": 93,
+    "emittedRegions": 12,
+    "bytesBeforeTrim": 31610,
+    "bytes": 31634
+  }
+}

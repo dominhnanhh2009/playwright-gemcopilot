@@ -1,31 +1,75 @@
 {
   "page": {
-    "url": "file:///C:/Users/thuanvl/Desktop/codes/playwright-gemcopilot/testing/cases/table_complex.html"
+    "url": "about:blank"
   },
   "regions": [
     {
       "id": "r1",
       "role": "table",
-      "name": "Danh sách người dùng"
+      "label": "Danh sách người dùng"
     }
   ],
   "actions": [
     {
-      "role": "button",
-      "name": "Xóa",
-      "selector": "table[aria-label=\"Danh sách người dùng\"] button",
-      "region": "r1",
-      "context": {
-        "role": "row",
-        "name": "Nguyễn Văn A"
-      },
-      "id": "a1"
+      "id": "a1",
+      "kind": "button",
+      "label": "Xóa",
+      "selectors": [
+        "table[aria-label=\"Danh sách người dùng\"] > tbody > tr > td:nth-of-type(2) > button",
+        "html > body > table[aria-label=\"Danh sách người dùng\"] > tbody > tr > td:nth-of-type(2) > button"
+      ],
+      "region": "r1"
+    }
+  ],
+  "content": [
+    {
+      "id": "c1",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Danh sách người dùng\"] > thead > tr > th:nth-of-type(1)",
+        "html > body > table[aria-label=\"Danh sách người dùng\"] > thead > tr > th:nth-of-type(1)"
+      ],
+      "textContent": "Tên",
+      "region": "r1"
+    },
+    {
+      "id": "c2",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Danh sách người dùng\"] > thead > tr > th:nth-of-type(2)",
+        "html > body > table[aria-label=\"Danh sách người dùng\"] > thead > tr > th:nth-of-type(2)"
+      ],
+      "textContent": "Hành động",
+      "region": "r1"
+    },
+    {
+      "id": "c3",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Danh sách người dùng\"] > tbody > tr > td:nth-of-type(1)",
+        "html > body > table[aria-label=\"Danh sách người dùng\"] > tbody > tr > td:nth-of-type(1)"
+      ],
+      "textContent": "Nguyễn Văn A",
+      "region": "r1"
+    },
+    {
+      "id": "c4",
+      "kind": "cell",
+      "selectors": [
+        "table[aria-label=\"Danh sách người dùng\"] > tbody > tr > td:nth-of-type(2)",
+        "html > body > table[aria-label=\"Danh sách người dùng\"] > tbody > tr > td:nth-of-type(2)"
+      ],
+      "textContent": "Xóa",
+      "region": "r1"
     }
   ],
   "stats": {
     "rawCandidates": 1,
     "emittedActions": 1,
+    "rawContentCandidates": 4,
+    "emittedContentNodes": 4,
     "emittedRegions": 1,
-    "bytes": 450
+    "bytesBeforeTrim": 1553,
+    "bytes": 1576
   }
 }

@@ -1,33 +1,85 @@
 {
   "page": {
-    "url": "file:///C:/Users/thuanvl/Desktop/codes/playwright-gemcopilot/testing/cases/table.html"
+    "url": "about:blank"
   },
+  "regions": [],
   "actions": [
     {
-      "role": "button",
-      "name": "Open Cloudflare",
-      "selector": "button[aria-label=\"Open Cloudflare\"]",
-      "context": {
-        "role": "row",
-        "name": "Cloudflare"
-      },
-      "id": "a1"
+      "id": "a1",
+      "kind": "button",
+      "label": "Open Cloudflare",
+      "selectors": [
+        "button[aria-label=\"Open Cloudflare\"]",
+        "html > body > table > tbody > tr:nth-of-type(1) > td:nth-of-type(2) > button[aria-label=\"Open Cloudflare\"]"
+      ]
     },
     {
-      "role": "button",
-      "name": "Open OpenAI",
-      "selector": "button[aria-label=\"Open OpenAI\"]",
-      "context": {
-        "role": "row",
-        "name": "OpenAI"
-      },
-      "id": "a2"
+      "id": "a2",
+      "kind": "button",
+      "label": "Open OpenAI",
+      "selectors": [
+        "button[aria-label=\"Open OpenAI\"]",
+        "html > body > table > tbody > tr:nth-of-type(2) > td:nth-of-type(2) > button[aria-label=\"Open OpenAI\"]"
+      ]
+    }
+  ],
+  "content": [
+    {
+      "id": "c1",
+      "kind": "cell",
+      "selectors": [
+        "html > body > table > thead > tr > th:nth-of-type(1)"
+      ],
+      "textContent": "Name"
+    },
+    {
+      "id": "c2",
+      "kind": "cell",
+      "selectors": [
+        "html > body > table > thead > tr > th:nth-of-type(2)"
+      ],
+      "textContent": "Action"
+    },
+    {
+      "id": "c3",
+      "kind": "cell",
+      "selectors": [
+        "html > body > table > tbody > tr:nth-of-type(1) > td:nth-of-type(1)"
+      ],
+      "textContent": "Cloudflare"
+    },
+    {
+      "id": "c4",
+      "kind": "cell",
+      "selectors": [
+        "html > body > table > tbody > tr:nth-of-type(1) > td:nth-of-type(2)"
+      ],
+      "textContent": "Open"
+    },
+    {
+      "id": "c5",
+      "kind": "cell",
+      "selectors": [
+        "html > body > table > tbody > tr:nth-of-type(2) > td:nth-of-type(1)"
+      ],
+      "textContent": "OpenAI"
+    },
+    {
+      "id": "c6",
+      "kind": "cell",
+      "selectors": [
+        "html > body > table > tbody > tr:nth-of-type(2) > td:nth-of-type(2)"
+      ],
+      "textContent": "Open"
     }
   ],
   "stats": {
     "rawCandidates": 2,
     "emittedActions": 2,
+    "rawContentCandidates": 6,
+    "emittedContentNodes": 6,
     "emittedRegions": 0,
-    "bytes": 482
+    "bytesBeforeTrim": 1376,
+    "bytes": 1399
   }
 }

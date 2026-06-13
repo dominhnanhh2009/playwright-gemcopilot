@@ -75,7 +75,7 @@ export class Brain implements IBrain {
                 HƯỚNG DẪN:
                  - nếu nhiệm vụ đã hoàn thành thì phản hồi mà ko gọi tool để kết thúc vòng lặp này!
                  - các phản hồi khi đang trong vòng lặp vẫn có thể phản hồi text nhưng cần kèm function calling để giữ cho vòng lặp sống!
-                 - đối với tham số selector cho các tool **nên** sử dụng **nguyên văn** phần selector gắn sẵn trong SemanticUItree (runtime đã tính sẵn selector để unique nhất có thể cho element đó)
+                 - đối với tham số selector cho các tool **nên** sử dụng **nguyên văn** phần selectors gắn sẵn trong SemanticUItree (runtime đã tính sẵn selector để unique nhất có thể cho element đó). nếu fail thì fallback sang selector tiếp theo!
                  - lịch sử các hành động cung cấp cho bạn 1 góc nhìn về quá trình thực hiện nhiệm vụ 1 cách liền mạch (bạn đóng vai như 1 statemachine)
                  - nếu trong lịch sử hành động phát hiện fail loop liên tục/vấn đề khó automate, hãy cầu cứu human để tránh đốt token vô ích!
 
