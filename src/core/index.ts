@@ -17,11 +17,12 @@ import { clickTool, performClick } from './tools/click';
 import { typeTool, performType } from './tools/type';
 import { scrollTool, performScroll } from './tools/scroll';
 import { keypressTool, performKeypress } from './tools/keypress';
+import { getTextContentTool, performGetTextContent } from './tools/getTextContent';
 import {
     askForHumanConfirmationTool,
     performAskForHumanConfirmation
 } from './tools/askForHumanConfirmation';
-
+//@ts-ignore
 import { makeSemanticUiTree } from './semantic-ui-tree.js';
 
 // Tạm thời áp dụng plugin stealth
@@ -107,6 +108,9 @@ export class Core implements ICore {
                 case 'keypress':
                     return await performKeypress(this.page, action);
 
+                case 'getTextContent':
+                    return await performGetTextContent(this.page, action);
+
                 case 'askForHumanConfirmation':
                     return await performAskForHumanConfirmation(action);
 
@@ -150,6 +154,7 @@ export class Core implements ICore {
             typeTool,
             scrollTool,
             keypressTool,
+            getTextContentTool,
             askForHumanConfirmationTool,
         ];
     }
